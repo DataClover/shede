@@ -222,6 +222,14 @@ from v5_observe import router as ObserveRouter
 app.include_router(ObserveRouter)
 
 # -----------------------------------------------------------
+# 【 -- v5版本 - 舍得处理建议（出售/转赠/回收/丢弃） -- 】
+# -----------------------------------------------------------
+# 接口：/v5/dispose/suggest  -- POST  生成处理建议并写回
+# 接口：/v5/dispose/plan     -- GET   读回已生成的建议
+from v5_dispose import router as DisposeRouter
+app.include_router(DisposeRouter)
+
+# -----------------------------------------------------------
 # 【 -- 测试模块 -- 】
 # -----------------------------------------------------------
 # 接口：/v0/testAI/  -- 请求方式POST

@@ -15,7 +15,7 @@
 | v0.2.0 | **决策数据层**：`items_detail` 加 17 个决策字段（三态 / 回答 / 六维 / 观察箱 / 处理）+ 旧库无损就地迁移 | ✅ 已完成 |
 | v0.3.0 | **AI 六维分析接口**：`/v5/decision/questions` + `/v5/decision/analyze` + `/v5/decision/item`，结论写回 `ai_*` | ✅ 已完成 |
 | v0.4.0 | **30 天观察箱**：`/v5/decision/choose` 四选一流转 + `/v5/observe/{list,due,use,overview}` | ✅ 已完成 |
-| v0.5.0 | 处理建议（出售文案 / 转赠渠道 / 回收） | ⬜ 待做 |
+| v0.5.0 | **处理建议**：`/v5/dispose/{suggest,plan}`（出售文案+估价区间 / 转赠对象 / 回收指引） | ✅ 已完成 |
 | v0.6.0 | 前端四页（question / verdict / observe / dispose） | ⬜ 待做 |
 | v1.0.0 | 首页三态看板 + 与 PPT 完全对齐 | ⬜ 待做 |
 
@@ -136,6 +136,17 @@ pending（待决策）──答完问题+AI 分析──> user 选择
 
 提醒策略：**不用微信订阅消息**（需正式 AppID 且要逐次授权），改成小程序内「首页到期卡片 + 红点」，
 打开小程序就能看到，不受推送权限限制。
+
+### 处理建议（v0.5.0）
+
+| 接口 | 方法 | 说明 |
+|---|---|---|
+| `/v5/dispose/suggest` | POST | 入参 `channel`（sell/gift/recycle/discard，留空按已有 `decision` 推断）；出「标题文案 + 正文 + 渠道 + 3 条可执行 tips」，出售额外给**估价区间**，结果写回 `dispose_channel` / `dispose_suggest` |
+| `/v5/dispose/plan` | GET | 读回已生成的建议（详情页展示） |
+
+- 估价按分类区间 × 成色系数（`ai_score` 越高越靠近上沿），**不编造精确价格**；
+- 渠道是校园场景可落地的：闲鱼/转转/学校二手群、同宿舍/班级群/公益点、回收箱与电子废弃物点；
+- 填了真实 key 时用 `glm-4-flash` 改写文案与 tips（`source=ai`），失败回退规则版（`source=rule`）。
 
 ## 来源声明
 
