@@ -1,0 +1,51 @@
+<!-- packageShede/pages/verdict/verdict.wxml -->
+<view class="page" wx:if="{{result}}">
+  <view class="hero">
+    <view class="verdict-chip {{chipClass}}">
+      {{result.verdict === 'keep' ? '建议留着' : (result.verdict === 'observe' ? '建议先观察' : '建议处理掉')}}
+    </view>
+    <view class="item-card">
+      <view class="li-head">
+        <view class="item-title">{{result.title}}</view>
+        <view>
+          <text class="score-big">{{result.score}}</text><text class="score-unit">/100 留</text>
+        </view>
+      </view>
+      <view class="reason">{{result.reason}}</view>
+      <view class="reason" wx:if="{{result.advice}}" style="color:#1a8f4a;">{{result.advice}}</view>
+    </view>
+  </view>
+
+  <view class="item-card">
+    <view class="q-title">六个维度怎么算的</view>
+    <view class="dim-row" wx:for="{{dims}}" wx:key="key">
+      <view class="dim-head">
+        <text>{{item.name}}</text>
+        <text>{{item.value}}</text>
+      </view>
+      <view class="dim-bar">
+        <view class="dim-fill {{item.cls}}" style="width:{{item.value}}%"></view>
+      </view>
+    </view>
+    <view class="foot-note" style="text-align:left;margin-top:16rpx;">
+      分数越高越支持留下。占用空间这一维暂时给中性分，因为还没量过尺寸。
+    </view>
+  </view>
+
+  <view class="item-card">
+    <view class="q-title">那你想怎么办？</view>
+    <button class="btn-primary" data-decision="keep" bindtap="onChoose" loading="{{chooseLoading === 'keep'}}">
+      留下，继续用
+    </button>
+    <button class="btn-ghost" data-decision="observe" bindtap="onChoose" loading="{{chooseLoading === 'observe'}}">
+      放进 30 天观察箱
+    </button>
+    <view class="li-actions" style="margin-top:20rpx;">
+      <view class="li-btn li-btn-main" data-channel="sell" bindtap="onDispose">卖掉 / 送人</view>
+      <view class="li-btn" bindtap="onDiscard">丢掉</view>
+      <view class="li-btn" bindtap="onRetry">重新答题</view>
+    </view>
+  </view>
+</view>
+
+<view class="loading" wx:else>加载中...</view>

@@ -33,6 +33,16 @@
       ]
     },
     {
+      "root": "packageShede/",
+      "name": "shede",
+      "pages": [
+        "pages/question/question",
+        "pages/verdict/verdict",
+        "pages/observe/observe",
+        "pages/dispose/dispose"
+      ]
+    },
+    {
       "root": "packageProfile/",
       "name": "profile",
       "pages": [

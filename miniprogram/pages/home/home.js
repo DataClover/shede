@@ -32,7 +32,39 @@ Page({
     selectorBags: [], // 浮层中的袋子列表
     selectedBox: null, // 选中的箱子信息
     quickScanMode: false, // 是否为快速拍照模式
-    isAlbumImport: false // 是否为相册导入模式
+    isAlbumImport: false, // 是否为相册导入模式
+    // 舍得三态看板（待决策 / 观察中 / 已处理）
+    shede: { pending: 0, observing: 0, resolved: 0, due_count: 0 }
+  },
+
+  /*** 舍得：拉三态统计（失败不打扰用户，保留 0）   */
+  loadShede() {
+    const baseUrl = app.globalData.baseUrl;
+    const openid = app.globalData.openid;
+    if (!openid) return;
+    wx.request({
+      url: `${baseUrl}v5/observe/overview?openid=${openid}`,
+      method: 'GET',
+      success: (res) => {
+        if (res.statusCode === 200 && res.data && res.data.data) {
+          const d = res.data.data;
+          this.setData({
+            shede: {
+              pending: d.pending || 0,
+              observing: d.observing || 0,
+              resolved: d.resolved || 0,
+              due_count: d.due_count || 0
+            }
+          });
+        }
+      },
+      fail: () => console.warn('舍得统计拉取失败（不影响首页）')
+    });
+  },
+
+  /*** 舍得：点卡片进观察箱   */
+  onShedeTap() {
+    wx.navigateTo({ url: '/packageShede/pages/observe/observe' });
   },
 
   /*** 生命周期函数--监听页面加载   */
@@ -131,6 +163,9 @@ Page({
       
       // 更新全局数据缓存
       app.globalData.userHomeData = userHomeData;
+
+      // 顺手刷一下舍得三态（有库没库都不影响首页）
+      this.loadShede();
       
     } catch (error) {
       console.error('加载箱子数据失败:', error);

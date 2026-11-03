@@ -1,0 +1,49 @@
+<!-- packageShede/pages/observe/observe.wxml -->
+<view class="page">
+  <view class="hero">
+    <view class="hero-title">观察箱</view>
+    <view class="hero-sub">放进来 30 天，还没用上就处理掉</view>
+  </view>
+
+  <view class="item-card">
+    <view class="li-head">
+      <view>
+        <view class="li-title">待决策 {{overview.pending || 0}}</view>
+        <view class="li-sub">观察中 {{overview.observing || 0}} · 已处理 {{overview.resolved || 0}} · 共 {{overview.total || 0}}</view>
+      </view>
+      <view class="badge {{overview.due_count > 0 ? 'badge-warn' : 'badge-ok'}}">
+        {{overview.due_count > 0 ? '到期 ' + overview.due_count : '没有到期'}}
+      </view>
+    </view>
+    <view class="li-actions">
+      <view class="li-btn" bindtap="onRefresh">刷新</view>
+    </view>
+  </view>
+
+  <view class="loading" wx:if="{{loading}}">加载中...</view>
+
+  <view wx:if="{{!loading && items.length === 0}}" class="item-card">
+    <view class="q-title">观察箱是空的</view>
+    <view class="foot-note" style="text-align:left;margin-top:12rpx;">
+      在「我的物品」里点一件东西，答完问题选「放进观察箱」就会出现在这里。
+    </view>
+  </view>
+
+  <view class="list-item" wx:for="{{items}}" wx:key="item_id">
+    <view class="li-head">
+      <view class="li-title">{{item.title}}</view>
+      <view class="badge {{item.expired ? 'badge-warn' : ''}}">
+        {{item.expired ? '已到期' : '还剩 ' + item.days_left + ' 天'}}
+      </view>
+    </view>
+    <view class="li-sub">
+      到期日 {{item.observe_until}} · 观察期内用到 {{item.observe_used_count}} 次
+    </view>
+    <view class="li-actions">
+      <view class="li-btn li-btn-main" data-id="{{item.item_id}}" bindtap="onUsed">我用到了</view>
+      <view class="li-btn" data-id="{{item.item_id}}" bindtap="onKeep">留下</view>
+      <view class="li-btn" data-id="{{item.item_id}}" bindtap="onDispose">处理</view>
+      <view class="li-btn" data-id="{{item.item_id}}" bindtap="onVerdict">看结论</view>
+    </view>
+  </view>
+</view>

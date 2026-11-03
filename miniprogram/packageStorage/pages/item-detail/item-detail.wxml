@@ -257,6 +257,10 @@
         <text class="cuIcon-deletefill"></text>
         <text>删除</text>
       </button>
+      <button class="action-btn" bindtap="onShedeDecision">
+        <text class="cuIcon-questionfill"></text>
+        <text>该不该留</text>
+      </button>
     </view>
   </view>
 </view>

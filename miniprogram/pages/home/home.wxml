@@ -36,7 +36,26 @@
       </view>
     </view>
 
-    <!-- 箱子列表 -->
+    <!-- 舍得三态看板 -->
+      <view
+        class="shede-card"
+        bindtap="onShedeTap"
+        style="margin:20rpx 30rpx 0;padding:26rpx 28rpx;border-radius:20rpx;background:#ffffff;box-shadow:0 4rpx 16rpx rgba(0,0,0,0.05);display:flex;align-items:center;justify-content:space-between;"
+      >
+        <view>
+          <view style="font-size:30rpx;font-weight:600;color:#1f2329;">舍得 · 断舍离</view>
+          <view style="margin-top:8rpx;font-size:24rpx;color:#8a9099;">
+            待决策 {{shede.pending}} · 观察中 {{shede.observing}}<text wx:if="{{shede.due_count > 0}}" style="color:#c0392b;"> · 到期 {{shede.due_count}}</text>
+          </view>
+        </view>
+        <view
+          style="padding:12rpx 24rpx;border-radius:40rpx;font-size:24rpx;background:{{shede.due_count > 0 ? '#fdeceb' : '#eaf5ee'}};color:{{shede.due_count > 0 ? '#c0392b' : '#1a8f4a'}};"
+        >
+          {{shede.due_count > 0 ? '去处理' : '看观察箱'}}
+        </view>
+      </view>
+
+      <!-- 箱子列表 -->
     <view wx:else class="box-list">
       <!-- 统计信息 -->
       <view class="stats-card card bg-white">
@@ -110,6 +129,25 @@
             </view>
             <text class="action-text text-gray">相册导入</text>
           </view>
+        </view>
+      </view>
+
+      <!-- 舍得三态看板 -->
+      <view
+        class="shede-card"
+        bindtap="onShedeTap"
+        style="margin:20rpx 30rpx 0;padding:26rpx 28rpx;border-radius:20rpx;background:#ffffff;box-shadow:0 4rpx 16rpx rgba(0,0,0,0.05);display:flex;align-items:center;justify-content:space-between;"
+      >
+        <view>
+          <view style="font-size:30rpx;font-weight:600;color:#1f2329;">舍得 · 断舍离</view>
+          <view style="margin-top:8rpx;font-size:24rpx;color:#8a9099;">
+            待决策 {{shede.pending}} · 观察中 {{shede.observing}}<text wx:if="{{shede.due_count > 0}}" style="color:#c0392b;"> · 到期 {{shede.due_count}}</text>
+          </view>
+        </view>
+        <view
+          style="padding:12rpx 24rpx;border-radius:40rpx;font-size:24rpx;background:{{shede.due_count > 0 ? '#fdeceb' : '#eaf5ee'}};color:{{shede.due_count > 0 ? '#c0392b' : '#1a8f4a'}};"
+        >
+          {{shede.due_count > 0 ? '去处理' : '看观察箱'}}
         </view>
       </view>
 

@@ -1,0 +1,44 @@
+<!-- packageShede/pages/dispose/dispose.wxml -->
+<view class="page">
+  <view class="hero">
+    <view class="hero-title">怎么处理最好</view>
+    <view class="hero-sub">给你一条能立刻做的下一步，而不是一句"建议处理"</view>
+  </view>
+
+  <view class="item-card">
+    <view class="opts" style="margin-top:0;">
+      <view
+        wx:for="{{channels}}"
+        wx:key="key"
+        class="opt {{channel === item.key ? 'opt-on' : ''}}"
+        data-key="{{item.key}}"
+        bindtap="onSwitchChannel"
+      >{{item.label}}</view>
+    </view>
+  </view>
+
+  <view class="loading" wx:if="{{loading}}">生成建议中...</view>
+
+  <block wx:if="{{!loading && suggest}}">
+    <view class="item-card">
+      <view class="q-title">{{suggest.title_text}}</view>
+      <view class="reason">{{suggest.body_text}}</view>
+      <view class="reason" wx:if="{{suggest.price_range}}" style="color:#b47100;">
+        参考价 {{suggest.price_range[0]}} ~ {{suggest.price_range[1]}} 元（按分类和成色估的区间，不是定价）
+      </view>
+      <view class="platforms">
+        <view class="platform" wx:for="{{suggest.platforms}}" wx:key="*this">{{item}}</view>
+      </view>
+    </view>
+
+    <view class="item-card">
+      <view class="q-title">照着做就行</view>
+      <view class="tip-list">
+        <view class="tip-item" wx:for="{{suggest.tips}}" wx:key="*this">· {{item}}</view>
+      </view>
+    </view>
+
+    <button class="btn-primary" bindtap="onCopy">复制文案</button>
+    <button class="btn-ghost" bindtap="onDone" loading="{{marking}}">已处理完，标记一下</button>
+  </block>
+</view>

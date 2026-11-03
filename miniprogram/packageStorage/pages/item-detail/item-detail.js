@@ -30,6 +30,17 @@ Page({
   /**
    * 生命周期函数--监听页面加载
    */
+  // 舍得：进入决策问卷（问答 -> 六维结论 -> 四选一）
+  onShedeDecision() {
+    const info = this.data.itemInfo || {};
+    const itemId = this.itemId || info.item_id || info.id;
+    if (!itemId) {
+      wx.showToast({ title: '拿不到物品ID，先刷新试试', icon: 'none' });
+      return;
+    }
+    wx.navigateTo({ url: `/packageShede/pages/question/question?item_id=${itemId}` });
+  },
+
   onLoad(options) {
     console.log('物品详情页面加载', options);
     

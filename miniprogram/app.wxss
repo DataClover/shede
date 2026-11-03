@@ -4,6 +4,8 @@
 @import "colorui/main.wxss";
 @import "colorui/icon.wxss";
 @import "colorui/animation.wxss";
+/* 舍得决策层共用样式 */
+@import "packageShede/common.wxss";
 @import "colorui/dark.wxss";
 
 /* 全局基础样式 */
