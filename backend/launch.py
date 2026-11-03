@@ -203,6 +203,15 @@ from v4_search import router as SearchRouter
 app.include_router(SearchRouter)
 
 # -----------------------------------------------------------
+# 【 -- v5版本 - 舍得决策层 -- 】
+# -----------------------------------------------------------
+# 接口：/v5/decision/questions  -- GET   决策问卷定义
+# 接口：/v5/decision/analyze    -- POST  六维分析（写回 ai_* 四列）
+# 接口：/v5/decision/item       -- GET   详情页（含已有结论与三态）
+from v5_decision import router as DecisionRouter
+app.include_router(DecisionRouter)
+
+# -----------------------------------------------------------
 # 【 -- 测试模块 -- 】
 # -----------------------------------------------------------
 # 接口：/v0/testAI/  -- 请求方式POST

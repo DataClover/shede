@@ -15,6 +15,8 @@ model = glm-4v-flash
 temperature = 1.0
 # 模型输出的最大token数，最大输出为4095，默认值为10
 max_completion_tokens = 1000
+# v5 决策分析用的纯文本模型（glm-4v-flash 是视觉模型，打分走这个）
+decision_model = glm-4-flash
 
 # 微信小程序配置段落
 [weixin]
