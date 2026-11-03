@@ -212,6 +212,16 @@ from v5_decision import router as DecisionRouter
 app.include_router(DecisionRouter)
 
 # -----------------------------------------------------------
+# 【 -- v5版本 - 舍得观察箱（30 天冷静期） -- 】
+# -----------------------------------------------------------
+# 接口：/v5/observe/list      -- GET   观察中列表（按到期日）
+# 接口：/v5/observe/due       -- GET   已到期（首页卡片/红点）
+# 接口：/v5/observe/use       -- POST  观察期内「我用到了」计数
+# 接口：/v5/observe/overview  -- GET   三态看板计数
+from v5_observe import router as ObserveRouter
+app.include_router(ObserveRouter)
+
+# -----------------------------------------------------------
 # 【 -- 测试模块 -- 】
 # -----------------------------------------------------------
 # 接口：/v0/testAI/  -- 请求方式POST

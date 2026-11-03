@@ -14,7 +14,7 @@
 | v0.1.0 | **可运行基线**：原收纳能力跑通 + 修复 4 个启动阻断 + 演示模式 | ✅ 已完成 |
 | v0.2.0 | **决策数据层**：`items_detail` 加 17 个决策字段（三态 / 回答 / 六维 / 观察箱 / 处理）+ 旧库无损就地迁移 | ✅ 已完成 |
 | v0.3.0 | **AI 六维分析接口**：`/v5/decision/questions` + `/v5/decision/analyze` + `/v5/decision/item`，结论写回 `ai_*` | ✅ 已完成 |
-| v0.4.0 | 30 天观察箱 | ⬜ 待做 |
+| v0.4.0 | **30 天观察箱**：`/v5/decision/choose` 四选一流转 + `/v5/observe/{list,due,use,overview}` | ✅ 已完成 |
 | v0.5.0 | 处理建议（出售文案 / 转赠渠道 / 回收） | ⬜ 待做 |
 | v0.6.0 | 前端四页（question / verdict / observe / dispose） | ⬜ 待做 |
 | v1.0.0 | 首页三态看板 + 与 PPT 完全对齐 | ⬜ 待做 |
@@ -123,6 +123,19 @@ pending（待决策）──答完问题+AI 分析──> user 选择
 - `space`（占用空间）目前取中性 50 —— 拍照识别阶段还没有尺寸信息，不编造
 - 填了真实智谱 key 就改走 `glm-4-flash` 出六维 + 理由（`source=ai`）；key 缺失或 AI 异常时
   自动退回规则打分并在 `reason` 里注明 `source=rule(...)`，**演示永远不会卡在 AI 上**
+
+### 四选一与观察箱（v0.4.0）
+
+| 接口 | 方法 | 说明 |
+|---|---|---|
+| `/v5/decision/choose` | POST | `decision` = `keep/observe/sell/gift/recycle/discard`；`observe` 写 `observe_until=+30天`，其余直接落 `resolved`（出售/转赠/回收/丢弃同时记 `dispose_channel` 与 `disposed_at`） |
+| `/v5/observe/list` | GET | 观察中列表，按到期日升序，带 `days_left` / `expired` |
+| `/v5/observe/due` | GET | 已到期的（首页到期卡片 + 红点数据源） |
+| `/v5/observe/use` | POST | 观察期内「我用到了」`observe_used_count+1`，≥3 次提示直接留下 |
+| `/v5/observe/overview` | GET | 三态计数（pending/observing/resolved + 留下数/处理数 + 到期数），v1.0.0 首页直接用 |
+
+提醒策略：**不用微信订阅消息**（需正式 AppID 且要逐次授权），改成小程序内「首页到期卡片 + 红点」，
+打开小程序就能看到，不受推送权限限制。
 
 ## 来源声明
 

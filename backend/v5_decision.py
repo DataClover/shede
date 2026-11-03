@@ -20,7 +20,7 @@
 import json
 import re
 from configparser import ConfigParser
-from datetime import datetime
+from datetime import datetime, date, timedelta
 from typing import Dict, Any
 
 from fastapi import APIRouter, HTTPException
@@ -105,6 +105,25 @@ class AnalyzeRequest(BaseModel):
     rebuy_answer: str = Field("unsure")
     replace_answer: str = Field("none")
     emotion_answer: str = Field("mid")
+
+
+class ChooseRequest(BaseModel):
+    openid: str = Field(..., description="微信小程序 openid")
+    item_id: int = Field(..., description="物品 id")
+    decision: str = Field(..., description="keep / observe / sell / gift / recycle / discard")
+
+
+# 用户四选一 -> 三态流转
+DECISIONS = {
+    "keep":    {"status": "resolved", "channel": None,      "text": "已留下"},
+    "observe": {"status": "observing", "channel": None,     "text": "已放入 30 天观察箱"},
+    "sell":    {"status": "resolved", "channel": "sell",    "text": "已标记为出售"},
+    "gift":    {"status": "resolved", "channel": "gift",    "text": "已标记为转赠"},
+    "recycle": {"status": "resolved", "channel": "recycle", "text": "已标记为回收"},
+    "discard": {"status": "resolved", "channel": "trash",   "text": "已标记为丢弃"},
+}
+
+OBSERVE_DAYS = 30
 
 
 def _verdict_of(score: int) -> str:
@@ -311,5 +330,55 @@ async def decision_item(openid: str, item_id: int):
             "dim_labels": DIM_LABELS,
             "status_text": {"pending": "待决策", "observing": "观察中",
                             "resolved": "已处理"}.get(item.get("status"), "待决策"),
+        },
+    }
+
+
+@router.post("/v5/decision/choose")
+async def choose(req: ChooseRequest):
+    """用户四选一：写下 decision，并把 status 推到 observing / resolved。
+
+    keep       → resolved（已留下，不再提醒）
+    observe    → observing（30 天观察箱，写 observe_until）
+    sell/gift/recycle/discard → resolved（dispose_channel 记渠道，disposed_at 记时间）
+    """
+    user_id = _user_id(req.openid)
+    item = _get_item(req.item_id)
+    if item.get("user_id") not in (None, user_id):
+        raise HTTPException(status_code=403, detail="无权操作该物品")
+
+    spec = DECISIONS.get(req.decision)
+    if not spec:
+        raise HTTPException(status_code=400,
+                            detail="decision 取值非法，可选: " + " / ".join(DECISIONS))
+
+    now = datetime.now()
+    observe_until = (date.today() + timedelta(days=OBSERVE_DAYS)).isoformat() \
+        if req.decision == "observe" else None
+    disposed_at = now.strftime("%Y-%m-%d %H:%M:%S") if spec["channel"] else None
+
+    db_manager.execute_update(
+        "UPDATE items_detail SET decision = ?, decided_at = ?, status = ?, "
+        "observe_until = ?, dispose_channel = COALESCE(?, dispose_channel), "
+        "disposed_at = COALESCE(?, disposed_at), observe_used_count = "
+        "CASE WHEN ? = 'observe' THEN 0 ELSE observe_used_count END "
+        "WHERE item_id = ?",
+        (req.decision, now.strftime("%Y-%m-%d %H:%M:%S"), spec["status"],
+         observe_until, spec["channel"], disposed_at, req.decision, req.item_id))
+
+    return {
+        "status": "success",
+        "message": spec["text"],
+        "data": {
+            "item_id": req.item_id,
+            "title": item.get("title", ""),
+            "decision": req.decision,
+            "status": spec["status"],
+            "status_text": {"pending": "待决策", "observing": "观察中",
+                            "resolved": "已处理"}[spec["status"]],
+            "observe_until": observe_until,
+            "observe_days": OBSERVE_DAYS if req.decision == "observe" else None,
+            "dispose_channel": spec["channel"],
+            "decided_at": now.strftime("%Y-%m-%d %H:%M:%S"),
         },
     }
