@@ -146,6 +146,29 @@ class DatabaseInitializer:
             category VARCHAR(100) DEFAULT '',
             image_filename VARCHAR(255) DEFAULT '',
             created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+            -- ===== 舍得 (shede) 决策层 v0.2.0 =====
+            -- status: pending 待决策 / observing 观察中 / resolved 已处理
+            status TEXT NOT NULL DEFAULT 'pending',
+            -- 决策前 2~3 问的答案（前端枚举值，见 v5 接口说明）
+            usage_answer TEXT DEFAULT NULL,
+            rebuy_answer TEXT DEFAULT NULL,
+            replace_answer TEXT DEFAULT NULL,
+            emotion_answer TEXT DEFAULT NULL,
+            -- AI 六维分析结果
+            ai_verdict TEXT DEFAULT NULL,
+            ai_score INTEGER DEFAULT NULL,
+            ai_reason TEXT DEFAULT NULL,
+            ai_dims TEXT DEFAULT NULL,
+            -- 用户选择与时间线
+            decision TEXT DEFAULT NULL,
+            decided_at TEXT DEFAULT NULL,
+            observe_until TEXT DEFAULT NULL,
+            observe_used_count INTEGER NOT NULL DEFAULT 0,
+            last_used_at TEXT DEFAULT NULL,
+            -- 处理建议（出售/转赠/回收/丢弃）
+            dispose_channel TEXT DEFAULT NULL,
+            dispose_suggest TEXT DEFAULT NULL,
+            disposed_at TEXT DEFAULT NULL,
             FOREIGN KEY (user_id) REFERENCES users_summary(user_id),
             FOREIGN KEY (box_id) REFERENCES boxes_summary(box_id),
             FOREIGN KEY (bag_id) REFERENCES bags_summary(bag_id)
@@ -159,6 +182,9 @@ class DatabaseInitializer:
         cursor.execute("CREATE INDEX IF NOT EXISTS idx_items_bag_id ON items_detail(bag_id)")
         cursor.execute("CREATE INDEX IF NOT EXISTS idx_items_sort_id ON items_detail(box_id, sort_id)")
         cursor.execute("CREATE INDEX IF NOT EXISTS idx_items_category ON items_detail(category)")
+        # 舍得决策层索引：按三态看板 / 到期观察箱查询
+        cursor.execute("CREATE INDEX IF NOT EXISTS idx_items_status ON items_detail(user_id, status)")
+        cursor.execute("CREATE INDEX IF NOT EXISTS idx_items_observe ON items_detail(status, observe_until)")
         
         print("物品表创建成功")
     
