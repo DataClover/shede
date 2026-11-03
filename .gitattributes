@@ -1,0 +1,10 @@
+* text=auto
+*.bat text eol=crlf
+*.sh  text eol=lf
+*.py  text
+*.js  text
+*.wxml text
+*.wxss text
+*.json text
+*.png binary
+*.jpg binary

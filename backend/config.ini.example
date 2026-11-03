@@ -1,0 +1,29 @@
+# FastAPI 后台服务配置段落
+[fastapi]
+title=广州公有云 - 个人物品收纳整理
+description=这里是私有化的后台回调函数，有问题请联系：Lord
+version=1.0.0
+docs_url=/docs
+redoc_url=/redocs
+debug=False
+timeout=600
+
+# AI大模型配置段落
+[zhipu]
+zhipu_api_key = YOUR API KEY
+model = glm-4v-flash
+temperature = 1.0
+# 模型输出的最大token数，最大输出为4095，默认值为10
+max_completion_tokens = 1000
+
+# 微信小程序配置段落
+[weixin]
+AppID = YOUR APP ID
+AppSecret = YOUR App Secret
+
+# 演示模式段落（无微信账号 / 无智谱 key 时也能完整演示）
+# enabled=1：登录不请求微信接口，直接返回固定的 28 位演示 openid
+# mock_ai=0：填了真实 zhipu_api_key 后自动走真识别；保持 0 即可
+[demo]
+enabled = 1
+mock_ai = 0

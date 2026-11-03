@@ -1,0 +1,74 @@
+<!--packageProfile/pages/privacy/privacy.wxml-->
+<view class="page-container">
+  <!-- 自定义导航栏 -->
+  <cu-custom bgColor="bg-white" isBack="{{true}}">
+    <view slot="backText">返回</view>
+    <view slot="content">隐私政策</view>
+  </cu-custom>
+
+  <!-- 加载状态 -->
+  <view wx:if="{{loading}}" class="loading-container">
+    <view class="cu-load loading"></view>
+    <text class="loading-text">加载中...</text>
+  </view>
+
+  <!-- 隐私政策内容 -->
+  <view wx:else class="content-container">
+    <view class="markdown-content bg-white">
+      <!-- 标题 -->
+      <view class="title text-black">隐私政策</view>
+      
+      <!-- 更新时间 -->
+      <view class="update-time text-gray">最后更新：2025年7月27日</view>
+      
+      <!-- 内容区域 -->
+      <view class="content-section">
+        <view class="section-title text-black">1. 信息收集</view>
+        <view class="section-content text-gray">
+          <view>我们可能收集以下类型的信息：</view>
+          <view>• 开发者将在获取你的明示同意后，访问你的摄像头，用途是【拍摄物品并保存到您的空间，方便您后续查阅】</view>
+          <view>• 开发者将在获取你的明示同意后，收集你的位置信息，用途是【自动填写保存物品的位置，简化您的输入】</view>
+          <view>• 开发者读取你的剪切板，用途是【方便把小程序内的信息发给您，供您后续粘贴】</view>
+          <view>• 开发者收集你选中的照片或视频信息，用途是【将您上传的照片保存到您的空间，方便您后续查阅】</view>
+        </view>
+      </view>
+      
+      <view class="content-section">
+        <view class="section-title text-black">2. 信息使用</view>
+        <view class="section-content text-gray">
+          <view>我们使用收集的信息用于：</view>
+          <view>• 提供和维护我们的服务</view>
+          <view>• 改善用户体验</view>
+        </view>
+      </view>
+      
+      <view class="content-section">
+        <view class="section-title text-black">3. 信息保护</view>
+        <view class="section-content text-gray">
+          <view>我们采取以下措施保护您的信息：</view>
+          <view>• 使用加密技术保护数据传输</view>
+          <view>• 限制员工访问个人信息</view>
+          <view>• 定期审查安全措施</view>
+          <view>• 遵守相关法律法规</view>
+        </view>
+      </view>
+      
+      <view class="content-section">
+        <view class="section-title text-black">4. 信息共享</view>
+        <view class="section-content text-gray">
+          <view>我们不会向第三方出售、交易或转让您的个人信息，除非：</view>
+          <view>• 获得您的明确同意</view>
+          <view>• 法律要求或政府部门要求</view>
+        </view>
+      </view>
+      
+      <view class="content-section">
+        <view class="section-title text-black">5. 联系我们</view>
+        <view class="section-content text-gray">
+          <view>如果您对本隐私政策有任何疑问，请通过以下方式联系我们：</view>
+          <view>• 邮箱：cnPro@163.com</view>
+        </view>
+      </view>
+    </view>
+  </view>
+</view>

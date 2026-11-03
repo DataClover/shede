@@ -1,0 +1,80 @@
+<!--packageCamera/pages/camera/camera.wxml-->
+
+<view class="camera-container">
+  <!-- 相机组件 -->
+  <camera 
+    class="camera-view"
+    device-position="{{devicePosition}}"
+    flash="{{flashEnabled ? 'on' : 'off'}}"
+    bindinitdone="onCameraReady"
+    binderror="onCameraError"
+  >
+    <!-- 拍照预览 -->
+    <view class="photo-preview" wx:if="{{photoResult}}">
+      <image src="{{photoResult}}" mode="aspectFit"></image>
+    </view>
+  </camera>
+  
+  <!-- 顶部工具栏 -->
+  <view class="top-toolbar">
+    <view class="toolbar-left">
+      <view class="tool-btn" bindtap="goBack">
+        <text class="cuIcon-back text-white"></text>
+      </view>
+    </view>
+    
+    <view class="toolbar-right">
+      <view class="tool-btn" bindtap="toggleFlash">
+        <text class="cuIcon-{{flashEnabled ? 'lightfill' : 'light'}} text-white"></text>
+      </view>
+    </view>
+  </view>
+  
+  <!-- 操作提示 -->
+  <view class="tips-container">
+    <view class="tips-text">每次只拍一个物品，识别更准确</view>
+  </view>
+  
+  <!-- 底部操作栏 -->
+  <view class="bottom-toolbar">
+    <view class="toolbar-left">
+      <view class="tool-btn" bindtap="chooseFromAlbum">
+        <text class="cuIcon-pic text-white"></text>
+        <text class="tool-text">相册</text>
+      </view>
+    </view>
+    
+    <view class="toolbar-center">
+      <!-- 拍照控制 -->
+      <view class="photo-controls">
+        <view class="photo-btn" bindtap="takePhoto" wx:if="{{!photoResult && !processing}}">
+          <view class="photo-btn-inner"></view>
+        </view>
+        
+        <view class="photo-actions" wx:if="{{photoResult}}">
+          <button class="cu-btn bg-grey sm" bindtap="retakePhoto">重拍</button>
+          <button class="cu-btn bg-blue sm" disabled="{{processing}}" loading="{{processing}}">
+            {{processing ? '识别中...' : '确认'}}
+          </button>
+        </view>
+      </view>
+    </view>
+    
+    <view class="toolbar-right">
+      <view class="tool-btn" bindtap="switchCamera">
+        <text class="cuIcon-refresh text-white"></text>
+        <text class="tool-text">翻转</text>
+      </view>
+    </view>
+  </view>
+  
+  <!-- 处理状态遮罩 -->
+  <view class="processing-mask" wx:if="{{processing}}">
+    <view class="processing-content">
+      <view class="cu-load loading"></view>
+      <view class="processing-text">
+        识别物品中...
+      </view>
+    </view>
+  </view>
+</view>

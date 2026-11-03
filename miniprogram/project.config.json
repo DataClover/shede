@@ -1,0 +1,23 @@
+{
+  "description": "物品收纳整理小程序（小组作业演示配置）",
+  "appid": "touristappid",
+  "projectname": "AI-Inventory-APP",
+  "compileType": "miniprogram",
+  "miniprogramRoot": "./",
+  "libVersion": "3.8.10",
+  "setting": {
+    "urlCheck": false,
+    "es6": true,
+    "enhance": true,
+    "postcss": true,
+    "minified": false,
+    "newFeature": true,
+    "coverView": true,
+    "nodeModules": false,
+    "autoAudits": false,
+    "scopeDataCheck": false,
+    "checkInvalidKey": true,
+    "checkSiteMap": false
+  },
+  "condition": {}
+}

@@ -1,0 +1,297 @@
+/* packageProfile/pages/profile/profile.wxss */
+
+/* 页面容器 */
+.page-container {
+  min-height: 100vh;
+}
+
+/* 导航栏 */
+.nav-title {
+  font-size: 36rpx;
+  font-weight: 600;
+}
+
+/* 主容器 */
+.container {
+  padding: 30rpx;
+  padding-top: 0;
+}
+
+/* 骨架屏样式 */
+.skeleton-container {
+  padding-top: 30rpx;
+}
+
+.skeleton-user-info {
+  display: flex;
+  align-items: center;
+  padding: 40rpx;
+  border-radius: 24rpx;
+  margin-bottom: 30rpx;
+}
+
+.skeleton-avatar-large {
+  width: 120rpx;
+  height: 120rpx;
+  border-radius: 60rpx;
+  margin-right: 30rpx;
+}
+
+.skeleton-option-item {
+  display: flex;
+  align-items: center;
+  padding: 30rpx;
+  border-radius: 20rpx;
+  margin-bottom: 20rpx;
+}
+
+.skeleton-content {
+  flex: 1;
+  margin-left: 30rpx;
+}
+
+/* 用户信息卡片 */
+.user-info-card {
+  border-radius: 24rpx;
+  padding: 40rpx;
+  margin-bottom: 30rpx;
+}
+
+.user-header {
+  display: flex;
+  align-items: center;
+}
+
+.user-avatar-container {
+  margin-right: 30rpx;
+}
+
+.user-avatar {
+  width: 120rpx;
+  height: 120rpx;
+  border-radius: 60rpx;
+}
+
+.user-avatar-placeholder {
+  width: 120rpx;
+  height: 120rpx;
+  border-radius: 60rpx;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.user-avatar-placeholder text {
+  font-size: 60rpx;
+}
+
+.user-info {
+  flex: 1;
+}
+
+.user-name-placeholder {
+  font-size: 40rpx;
+  font-weight: 700;
+  margin-bottom: 12rpx;
+}
+
+.user-subtitle {
+  font-size: 26rpx;
+}
+
+.user-actions {
+  font-size: 32rpx;
+}
+
+/* 昵称编辑相关样式 */
+.user-name-container {
+  width: 100%;
+}
+
+.user-name {
+  font-size: 40rpx;
+  font-weight: 700;
+  margin-bottom: 12rpx;
+  padding: 8rpx 12rpx;
+  border-radius: 8rpx;
+  transition: all 0.3s ease;
+}
+
+.nickname-edit-container {
+  width: 100%;
+}
+
+.nickname-input {
+  width: 100%;
+  height: 80rpx;
+  padding: 0 20rpx;
+  border: 2rpx solid #e9ecef;
+  border-radius: 12rpx;
+  font-size: 28rpx;
+  color: #333;
+  background: #fff;
+  transition: border-color 0.3s;
+  margin-bottom: 20rpx;
+  box-sizing: border-box;
+}
+
+.nickname-input:focus {
+  border-color: #007aff;
+}
+
+.nickname-actions {
+  display: flex;
+  gap: 20rpx;
+  justify-content: flex-end;
+}
+
+.nickname-btn {
+  padding: 16rpx 32rpx;
+  border-radius: 12rpx;
+  font-size: 28rpx;
+  font-weight: 600;
+  text-align: center;
+  transition: all 0.3s ease;
+  min-width: 120rpx;
+}
+
+.nickname-btn.confirm {
+  background: #007aff;
+  color: #fff;
+  border: none;
+}
+
+.nickname-btn.confirm:active {
+  background: #0056cc;
+}
+
+.nickname-btn.cancel {
+  background: #f8f9fa;
+  color: #666;
+  border: 2rpx solid #e9ecef;
+}
+
+.nickname-btn.cancel:active {
+  background: #e9ecef;
+}
+
+/* 卡片通用样式 */
+.card {
+  border-radius: 24rpx;
+  padding: 40rpx;
+  margin-bottom: 30rpx;
+}
+
+.card-title {
+  font-size: 32rpx;
+  font-weight: 600;
+  margin-bottom: 30rpx;
+}
+
+.card-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 30rpx;
+}
+
+.view-more {
+  font-size: 26rpx;
+  font-weight: 500;
+}
+
+
+
+/* 列表项通用样式 */
+.list-item {
+  display: flex;
+  align-items: center;
+  padding: 30rpx 0;
+  transition: all 0.3s ease;
+}
+
+.list-item:last-child {
+  border-bottom: none;
+}
+
+.list-item:active {
+  margin: 0 -40rpx;
+  padding-left: 40rpx;
+  padding-right: 40rpx;
+  border-radius: 16rpx;
+}
+
+.list-item-icon {
+  width: 60rpx;
+  height: 60rpx;
+  border-radius: 16rpx;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-right: 24rpx;
+}
+
+.list-item-icon text {
+  font-size: 28rpx;
+  color: #fff;
+}
+
+.list-item-content {
+  flex: 1;
+}
+
+.list-item-title {
+  font-size: 28rpx;
+  font-weight: 600;
+  margin-bottom: 6rpx;
+}
+
+.list-item-subtitle {
+  font-size: 24rpx;
+}
+
+.list-item-arrow {
+  font-size: 28rpx;
+  margin-left: 16rpx;
+}
+
+/* 设置列表 */
+.settings-list {
+  display: flex;
+  flex-direction: column;
+}
+
+/* 其他列表 */
+.other-list {
+  display: flex;
+  flex-direction: column;
+}
+
+/* 响应式设计 */
+@media (max-width: 375px) {
+  .user-header {
+    display: flex;
+    align-items: center;
+    flex-direction: row;
+  }
+  
+  .user-avatar-container {
+    margin-right: 30rpx;
+    margin-bottom: 0;
+  }
+  
+  .user-info {
+    flex: 1;
+  }
+  
+  .nickname-actions {
+    flex-direction: row;
+    gap: 15rpx;
+  }
+  
+  .nickname-btn {
+    font-size: 26rpx;
+    padding: 14rpx 28rpx;
+    min-width: 100rpx;
+  }
+}

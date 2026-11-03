@@ -1,0 +1,674 @@
+/* pages/home/home.wxss */
+
+/* 导航栏样式 */
+.nav-title {
+  font-size: 36rpx;
+  font-weight: 600;
+}
+
+.nav-right {
+  display: flex;
+  align-items: center;
+}
+
+.nav-icon {
+  font-size: 40rpx;
+  padding: 10rpx;
+}
+
+/* 骨架屏样式 */
+.skeleton-container {
+  padding: 20rpx 0;
+}
+
+.skeleton-item {
+  margin-bottom: 30rpx;
+}
+
+.skeleton-box-item {
+  display: flex;
+  align-items: center;
+  padding: 30rpx;
+  border-radius: 12rpx;
+}
+
+.skeleton-content {
+  flex: 1;
+  margin-left: 24rpx;
+}
+
+/* 统计卡片 */
+.stats-card {
+  padding: 40rpx 30rpx;
+  margin-bottom: 30rpx;
+}
+
+.stats-content {
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
+}
+
+.stat-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  flex: 1;
+}
+
+.stat-number {
+  font-size: 48rpx;
+  font-weight: 700;
+  line-height: 1.2;
+}
+
+.stat-label {
+  font-size: 24rpx;
+  margin-top: 8rpx;
+}
+
+.stat-divider {
+  width: 1rpx;
+  height: 60rpx;
+  margin: 0 20rpx;
+}
+
+/* 物品限制卡片 */
+.item-limit-card {
+  padding: 30rpx;
+  margin-bottom: 30rpx;
+}
+
+.limit-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 24rpx;
+}
+
+.limit-title {
+  font-size: 32rpx;
+  font-weight: 600;
+}
+
+.limit-tip {
+  display: flex;
+  align-items: center;
+  padding: 8rpx 16rpx;
+  border-radius: 20rpx;
+  background-color: rgba(255, 165, 0, 0.1);
+  font-size: 24rpx;
+  transition: all 0.2s ease;
+}
+
+.limit-tip:active {
+  opacity: 0.7;
+  transform: scale(0.98);
+}
+
+.limit-tip .cuIcon-play {
+  font-size: 20rpx;
+  margin-right: 6rpx;
+}
+
+.tip-text {
+  font-size: 22rpx;
+}
+
+.limit-content {
+  display: flex;
+  flex-direction: column;
+}
+
+.limit-progress {
+  margin-bottom: 16rpx;
+}
+
+.progress-bar {
+  height: 12rpx;
+  border-radius: 6rpx;
+  overflow: hidden;
+  margin-bottom: 12rpx;
+  position: relative;
+}
+
+.progress-fill {
+  height: 100%;
+  border-radius: 6rpx;
+  transition: width 0.3s ease;
+}
+
+.progress-text {
+  display: flex;
+  align-items: center;
+  font-size: 28rpx;
+}
+
+.current-count {
+  font-weight: 600;
+}
+
+.separator {
+  margin: 0 6rpx;
+}
+
+.limit-count {
+  font-weight: 500;
+}
+
+.unit {
+  margin-left: 6rpx;
+  font-size: 24rpx;
+}
+
+.limit-desc {
+  font-size: 24rpx;
+  line-height: 1.4;
+}
+
+/* 快速操作 */
+.quick-actions {
+  padding: 30rpx;
+  margin-bottom: 30rpx;
+}
+
+.action-title {
+  font-size: 32rpx;
+  font-weight: 600;
+  margin-bottom: 30rpx;
+}
+
+.action-buttons {
+  display: flex;
+  justify-content: space-around;
+}
+
+.action-btn {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  flex: 1;
+}
+
+.action-icon {
+  width: 80rpx;
+  height: 80rpx;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  font-size: 36rpx;
+  margin-bottom: 16rpx;
+  box-shadow: var(--shadow-light);
+}
+
+.action-text {
+  font-size: 24rpx;
+  text-align: center;
+}
+
+/* 区域标题 */
+.section-title {
+  display: flex;
+  align-items: center;
+  margin-bottom: 20rpx;
+  padding: 0 10rpx;
+}
+
+.title-text {
+  font-size: 32rpx;
+  font-weight: 600;
+}
+
+.title-count {
+  font-size: 24rpx;
+  margin-left: 8rpx;
+}
+
+/* 箱子网格布局 */
+.boxes-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 20rpx;
+}
+
+.box-item {
+  transition: all 0.3s ease;
+}
+
+.box-item:active {
+  transform: scale(0.98);
+}
+
+/* 箱子卡片样式 */
+.box-card {
+  border-radius: 16rpx;
+  overflow: hidden;
+}
+
+/* 顶部色彩条 */
+.box-color-bar {
+  height: 12rpx;
+  width: 100%;
+}
+
+/* 卡片内容 */
+.box-content {
+  padding: 24rpx;
+}
+
+/* 箱子头部 */
+.box-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20rpx;
+}
+
+.box-title {
+  font-size: 32rpx;
+  font-weight: 600;
+  line-height: 1.3;
+  flex: 1;
+  margin-right: 16rpx;
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 1;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.box-menu {
+  padding: 8rpx;
+  font-size: 20rpx;
+  border-radius: 50%;
+  transition: all 0.2s ease;
+  flex-shrink: 0;
+}
+
+.box-menu:active {
+  opacity: 0.7;
+}
+
+/* 箱子信息 */
+.box-info {
+  margin-bottom: 20rpx;
+}
+
+.box-desc {
+  font-size: 24rpx;
+  line-height: 1.4;
+  margin-bottom: 12rpx;
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+  overflow: hidden;
+}
+
+.box-location {
+  display: flex;
+  align-items: center;
+  font-size: 22rpx;
+}
+
+.location-icon {
+  font-size: 20rpx;
+  margin-right: 6rpx;
+}
+
+.location-text {
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 1;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* 箱子底部 */
+.box-footer {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  position: relative;
+}
+
+.box-footer .box-location {
+  position: absolute;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  display: flex;
+  align-items: center;
+  max-width: calc(100% - 80rpx);
+}
+
+.box-count {
+  font-size: 38rpx;
+  font-weight: 500;
+  flex-shrink: 0;
+}
+
+/* 空状态优化 */
+.empty-state {
+  padding: 10rpx;
+}
+
+.empty-state .empty-icon {
+  font-size: 160rpx;
+  margin-bottom: 20rpx;
+}
+
+.empty-state .empty-title {
+  font-size: 32rpx;
+  font-weight: 600;
+  margin-bottom: 20rpx;
+}
+
+.empty-state .empty-subtitle {
+  font-size: 24rpx;
+  line-height: 1.8;
+  margin-bottom: 20rpx;
+  white-space: pre-line;
+}
+
+/* 悬浮按钮优化 */
+.btn-fab {
+  position: fixed;
+  bottom: 140rpx;
+  right: 30rpx;
+  width: 120rpx;
+  height: 120rpx;
+  font-size: 48rpx;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 999;
+  transition: all 0.3s ease;
+}
+
+.btn-fab:active {
+  transform: scale(0.9);
+}
+
+/* 响应式适配 */
+@media (max-width: 375px) {
+  /* 保持箱子两列布局 */
+  .boxes-grid {
+    grid-template-columns: 1fr 1fr;
+    gap: 16rpx;
+  }
+  
+  .box-content {
+    padding: 20rpx;
+  }
+  
+  .box-title {
+    font-size: 28rpx;
+  }
+  
+  .box-desc {
+    font-size: 22rpx;
+  }
+  
+  .box-footer .box-location {
+    font-size: 20rpx;
+  }
+  
+  .location-icon {
+    font-size: 18rpx;
+  }
+  
+  .box-count {
+    font-size: 32rpx;
+  }
+  
+  /* 保持快速操作按钮横向排列 */
+  .action-buttons {
+    display: flex;
+    justify-content: space-around;
+  }
+  
+  .action-btn {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    flex: 1;
+  }
+  
+  .action-icon {
+    margin-bottom: 16rpx;
+  }
+  
+  .action-text {
+    font-size: 22rpx;
+  }
+}
+
+
+
+/* 箱子选择浮层样式 */
+.box-selector-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 9999;
+  display: flex;
+  align-items: flex-end;
+  animation: fadeIn 0.3s ease;
+}
+
+.box-selector-modal {
+  width: 100%;
+  max-height: 80vh;
+  border-radius: 24rpx 24rpx 0 0;
+  animation: slideUp 0.3s ease;
+}
+
+.selector-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 40rpx 30rpx 20rpx;
+}
+
+.selector-title {
+  font-size: 36rpx;
+  font-weight: 600;
+}
+
+.selector-close {
+  font-size: 32rpx;
+  padding: 10rpx;
+  border-radius: 50%;
+  transition: all 0.2s ease;
+}
+
+.selector-close:active {
+  opacity: 0.7;
+}
+
+.selector-content {
+  padding: 20rpx 30rpx 40rpx;
+}
+
+.selector-subtitle {
+  font-size: 28rpx;
+  margin-bottom: 30rpx;
+  text-align: center;
+}
+
+.selector-list {
+  max-height: 50vh;
+}
+
+.selector-box-item {
+  margin-bottom: 20rpx;
+  transition: all 0.2s ease;
+}
+
+.selector-box-item:active {
+  transform: scale(0.98);
+}
+
+.selector-box-card {
+  display: flex;
+  align-items: center;
+  padding: 24rpx;
+  border-radius: 16rpx;
+}
+
+.selector-box-color {
+  width: 8rpx;
+  height: 60rpx;
+  border-radius: 4rpx;
+  margin-right: 20rpx;
+  flex-shrink: 0;
+}
+
+.selector-box-info {
+  flex: 1;
+  margin-right: 20rpx;
+}
+
+.selector-box-single-line {
+  display: flex;
+  align-items: center;
+  gap: 16rpx;
+}
+
+.selector-box-name {
+  font-size: 32rpx;
+  font-weight: 600;
+  line-height: 1.3;
+  flex-shrink: 0;
+}
+
+.selector-box-desc {
+  display: flex;
+  align-items: center;
+  font-size: 24rpx;
+  flex-shrink: 0;
+}
+
+.selector-box-desc text:first-child {
+  font-size: 20rpx;
+  margin-right: 6rpx;
+}
+
+.selector-box-count {
+  font-size: 24rpx;
+  margin-left: auto;
+  flex-shrink: 0;
+}
+
+.selector-box-arrow {
+  font-size: 24rpx;
+  flex-shrink: 0;
+}
+
+/* 袋子选择浮层样式 */
+.bag-selector-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 9999;
+  display: flex;
+  align-items: flex-end;
+  animation: fadeIn 0.3s ease;
+}
+
+.bag-selector-modal {
+  width: 100%;
+  max-height: 80vh;
+  border-radius: 24rpx 24rpx 0 0;
+  animation: slideUp 0.3s ease;
+}
+
+.selector-bag-item {
+  margin-bottom: 20rpx;
+  transition: all 0.2s ease;
+}
+
+.selector-bag-item:active {
+  transform: scale(0.98);
+}
+
+.selector-bag-card {
+  display: flex;
+  align-items: center;
+  padding: 24rpx;
+  border-radius: 16rpx;
+}
+
+.selector-bag-color {
+  width: 8rpx;
+  height: 60rpx;
+  border-radius: 4rpx;
+  margin-right: 20rpx;
+  flex-shrink: 0;
+}
+
+.selector-bag-info {
+  flex: 1;
+  margin-right: 20rpx;
+}
+
+.selector-bag-single-line {
+  display: flex;
+  align-items: center;
+  gap: 16rpx;
+}
+
+.selector-bag-name {
+  font-size: 32rpx;
+  font-weight: 600;
+  line-height: 1.3;
+  flex-shrink: 0;
+}
+
+.selector-bag-desc {
+  display: flex;
+  align-items: center;
+  font-size: 24rpx;
+  flex-shrink: 0;
+}
+
+.selector-bag-desc text:first-child {
+  font-size: 20rpx;
+  margin-right: 6rpx;
+}
+
+.selector-bag-count {
+  font-size: 24rpx;
+  margin-left: auto;
+  flex-shrink: 0;
+}
+
+.selector-bag-arrow {
+  font-size: 24rpx;
+  flex-shrink: 0;
+}
+
+/* 动画效果 */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes slideUp {
+  from {
+    transform: translateY(100%);
+  }
+  to {
+    transform: translateY(0);
+  }
+}
