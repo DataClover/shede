@@ -20,39 +20,10 @@ Page({
     // 处理状态
     processing: false,
     // 识别结果
-    recognitionResult: null,
-    // 页面参数
-    boxId: '',
-    bagId: ''
+    recognitionResult: null
   },
 
-  /**
-   * 生命周期函数--监听页面加载
-   */
-  onLoad(options) {
-    console.log('相机页面加载', options);
-    
-    // 获取页面参数
-    const boxId = options.box_id || '';
-    const bagId = options.bag_id || '';
-    const boxName = decodeURIComponent(options.box_name || '');
-    const boxColor = decodeURIComponent(options.box_color || '#1296db');
-    const boxLocation = decodeURIComponent(options.box_location || '');
-    const bagName = decodeURIComponent(options.bag_name || '');
-    const bagColor = decodeURIComponent(options.bag_color || '#1296db');
-
-    
-    this.setData({ 
-      boxId,
-      bagId,
-      boxName,
-      boxColor,
-      boxLocation,
-      bagName,
-      bagColor
-    });
-    
-    // 初始化相机
+  onLoad() {
     this.initCamera();
   },
 
@@ -172,31 +143,12 @@ Page({
       
       wx.hideLoading();
       
-      // 跳转到确认页面，传递完整的box和bag信息
-      const { boxId, bagId, boxName, boxColor, boxLocation, bagName, bagColor } = this.data;
-      const params = {
-        image: encodeURIComponent(imagePath),
-        result: encodeURIComponent(JSON.stringify(recognitionResult))
-      };
-      
-      if (boxId) {
-        params.box_id = boxId;
-        params.box_name = encodeURIComponent(boxName || '');
-        params.box_color = encodeURIComponent(boxColor || '#1296db');
-        params.box_location = encodeURIComponent(boxLocation || '');
-      }
-      if (bagId) {
-        params.bag_id = bagId;
-        params.bag_name = encodeURIComponent(bagName || '');
-        params.bag_color = encodeURIComponent(bagColor || '#1296db');
+      const queryString = [
+        `image=${encodeURIComponent(imagePath)}`,
+        `result=${encodeURIComponent(JSON.stringify(recognitionResult))}`
+      ].join('&');
 
-      }
-      
-      const queryString = Object.keys(params)
-        .map(key => `${key}=${params[key]}`)
-        .join('&');
-      
-      wx.navigateTo({ 
+      wx.navigateTo({
         url: `/packageCamera/pages/item-confirm/item-confirm?${queryString}`
       });
       
@@ -234,7 +186,7 @@ Page({
               const data = JSON.parse(res.data);
               
               // 检查是否是物品数量限制错误（后台返回的数据结构是 {detail: {...}}）
-              if (data.detail && data.detail.status === 'error' && data.detail.data && data.detail.data.need_watch_ad) {
+              if (data.detail && data.detail.status === 'error' && data.detail.data && data.detail.data.item_limit_reached) {
                 // 显示物品数量限制提示
                 this.showItemLimitDialog(data.detail);
                 reject(new Error('物品数量已达上限'));
@@ -321,7 +273,7 @@ Page({
     
     wx.showModal({
       title: '存储空间不足',
-      content: `${message}\n\n当前物品：${current_item_count || 0}/${item_limit || 0}\n\n观看广告可获得更多存储空间，将为您返回首页。`,
+      content: `${message}\n\n当前物品：${current_item_count || 0}/${item_limit || 0}\n\n请先清理一些物品再添加，将为您返回首页。`,
       showCancel: false,
       confirmText: '返回首页',
       success: (res) => {

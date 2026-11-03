@@ -11,11 +11,11 @@ Page({
   data: {
     // 应用信息
     appInfo: {
-      name: '智能物品管理',
-      version: '1.2.0',
-      buildNumber: '20251206',
-      releaseDate: '2025-12-06',
-      description: '一款个人物品收纳整理应用，帮助您轻松管理和查找物品。'
+      name: '舍得',
+      version: '1.0.0',
+      buildNumber: '20261103',
+      releaseDate: '2026-11-03',
+      description: '一款 AI 断舍离决策助手，通过四问、六维评分和 30 天观察，帮助你决定物品去留。'
     },
     
     // 开发团队
@@ -29,74 +29,35 @@ Page({
     features: [
       {
         icon: 'cuIcon-scan',
-        title: '智能扫描',
-        description: '支持图像识别，快速录入物品信息'
+        title: '拍照识别',
+        description: '拍摄或从相册选择物品，确认识别信息'
       },
       {
-        icon: 'cuIcon-search',
-        title: '快速搜索',
-        description: '多维度搜索，快速定位物品位置'
+        icon: 'cuIcon-edit',
+        title: '四问六维',
+        description: '用四个固定问题生成统一口径的六维评分'
       },
       {
-        icon: 'cuIcon-location',
-        title: '位置管理',
-        description: '分层级管理存储位置，清晰的物品归属'
+        icon: 'cuIcon-time',
+        title: '30 天观察',
+        description: '记录实际使用次数，到期后再决定去留'
       },
       {
-        icon: 'cuIcon-circle',
-        title: '云端同步',
-        description: '数据云端备份，多设备同步访问'
-      },
-      {
-        icon: 'cuIcon-share',
-        title: '分享协作',
-        description: '支持家庭成员共享，协作管理物品'
-      },
-      {
-        icon: 'cuIcon-notification',
-        title: '智能提醒',
-        description: '物品到期提醒，位置变更通知'
+        icon: 'cuIcon-delete',
+        title: '处理建议',
+        description: '提供出售、转赠、回收和丢弃的具体下一步'
       }
     ],
     
     // 版本历史
     versionHistory: [
       {
-        version: '1.2.0',
-        date: '2025-12-06',
-        changes: [
-          '新增物品/袋子批量移动功能',
-          '优化批量操作交互体验',
-          '改进位置选择界面',
-          '统一应用按钮样式'
-        ]
-      },
-      {
-        version: '1.1.0',
-        date: '2025-08-03',
-        changes: [
-          '完成基础搜索功能',
-          '修改大量bug'
-        ]
-      },
-      {
         version: '1.0.0',
-        date: '2025-07-27',
+        date: '2026-11-03',
         changes: [
-          '首次发布',
-          '基础物品管理功能',
-          '扫描识别功能',
-          '搜索和分类功能'
-        ]
-      },
-      {
-        version: '0.9.0',
-        date: '2025-7-15',
-        changes: [
-          'Beta版本发布',
-          '核心功能测试',
-          '用户界面优化',
-          '性能提升'
+          '上线拍照、四问、六维分析的决策链路',
+          '支持 30 天观察箱和四种处理渠道',
+          '支持演示登录与无 AI key 的规则降级'
         ]
       }
     ],
@@ -104,10 +65,10 @@ Page({
     // 技术栈
     techStack: [
       { name: '微信小程序', description: '前端框架' },
-      { name: 'ColorUI', description: 'UI组件库' },
-      { name: 'Node.js', description: '后端服务' },
-      { name: 'MongoDB', description: '数据存储' },
-      { name: 'AI识别', description: '图像识别技术' }
+      { name: 'ColorUI', description: 'UI 组件库' },
+      { name: 'FastAPI', description: '后端服务' },
+      { name: 'SQLite', description: '数据存储' },
+      { name: 'AI 识别', description: '图像识别与决策分析，支持规则降级' }
     ],
     
     // 许可证信息
@@ -261,7 +222,7 @@ Page({
       if (hasUpdate) {
         wx.showModal({
           title: '发现新版本',
-          content: '发现新版本 v1.1.0，包含以下更新：\n• 新增批量操作功能\n• 优化搜索性能\n• 修复已知问题\n\n是否立即更新？',
+          content: '发现新版本，包含决策流程优化与已知问题修复。\n\n是否立即更新？',
           success: (res) => {
             if (res.confirm) {
               wx.showToast({

@@ -224,8 +224,13 @@ def analyze_image_with_ai(image_data: bytes) -> tuple[str, Dict[str, Any]]:
         
         return ai_content, ai_result
             
+    except HTTPException:
+        raise
     except Exception as e:
-        raise HTTPException(status_code=500, detail=f"AI分析失败: {str(e)}")
+        # AI 不可用时退回模拟识别，保证「拍照 → 保存」流程永远走得通
+        raw, result = _mock_analyze(image_data)
+        raw = "[AI 调用失败（%s），已退回演示识别结果]\n%s" % (type(e).__name__, raw)
+        return raw, result
 
 def check_user_item_limit(user_id: int, db_manager: DatabaseManager) -> Dict[str, Any]:
     """
@@ -268,12 +273,12 @@ def check_user_item_limit(user_id: int, db_manager: DatabaseManager) -> Dict[str
             status_code=200, 
             detail={
                 "status": "error",
-                "message": f"物品数量已达到上限！当前已有{current_item_count}个物品，限制为{item_limit}个。请观看广告获取更多存储额度。",
+                "message": f"物品数量已达到上限！当前已有{current_item_count}个物品，限制为{item_limit}个。请先清理一些物品再添加。",
                 "data": {
                     "current_item_count": current_item_count,
                     "item_limit": item_limit,
                     "remaining_slots": 0,
-                    "need_watch_ad": True
+                    "item_limit_reached": True
                 }
             }
         )

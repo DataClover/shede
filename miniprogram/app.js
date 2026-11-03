@@ -187,16 +187,24 @@ App({
    * 预加载用户基础数据
    */
   async preloadUserData() {
-    try {
-      // TODO: 加载用户的箱子列表等基础数据
-      // const userData = await this.loadUserBasicData();
-      // this.globalData.userInfo = userData;
-      this.globalData.userDataReady = true;
-    } catch (error) {
-      console.error('预加载用户数据失败:', error);
-      // 即使预加载失败，也不阻止系统启动
-      this.globalData.userDataReady = false;
-    }
+    const baseUrl = this.globalData.baseUrl.replace(/\/+$/, '');
+    const openid = this.globalData.openid;
+    const userData = await new Promise((resolve, reject) => {
+      wx.request({
+        url: `${baseUrl}/v0/home/info?openid=${encodeURIComponent(openid)}`,
+        method: 'GET',
+        success: res => {
+          if (res.statusCode === 200 && res.data) {
+            resolve(res.data.data || {});
+          } else {
+            reject(new Error('用户初始化失败'));
+          }
+        },
+        fail: () => reject(new Error('无法连接后端，请确认服务已启动'))
+      });
+    });
+    this.globalData.userInfo = userData.user_info || null;
+    this.globalData.userDataReady = true;
   },
 
   /**

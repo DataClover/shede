@@ -141,7 +141,6 @@ Page({
       // 预加载一些关键图片资源
       const imagesToPreload = [
         '/assets/icons/home.png',
-        '/assets/icons/search.png',
         '/assets/icons/profile.png'
       ];
       

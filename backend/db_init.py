@@ -138,7 +138,7 @@ class DatabaseInitializer:
         CREATE TABLE IF NOT EXISTS items_detail (
             item_id INTEGER PRIMARY KEY AUTOINCREMENT,
             user_id INTEGER NOT NULL,
-            box_id INTEGER NOT NULL,
+            box_id INTEGER DEFAULT NULL,
             bag_id INTEGER DEFAULT NULL,
             sort_id INTEGER NOT NULL,
             title VARCHAR(200) NOT NULL,

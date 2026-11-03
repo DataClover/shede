@@ -1,79 +1,69 @@
-// packageProfile/pages/help/help.js
 Page({
   data: {
-    markdownContent: '',
-    loading: true,
-    // 帮助章节
+    loading: false,
     sections: [
       {
         id: 'getting-started',
         title: '快速开始',
-        icon: 'cuIcon-shop',
-        expanded: false
-      },
-      {
-        id: 'box-management',
-        title: '储物箱管理',
-        icon: 'cuIcon-shop',
-        expanded: false
-      },
-      {
-        id: 'bag-management',
-        title: '收纳袋管理',
-        icon: 'cuIcon-goods',
-        expanded: false
-      },
-      {
-        id: 'item-management',
-        title: '物品管理',
         icon: 'cuIcon-camera',
-        expanded: false
+        expanded: true,
+        lines: [
+          '在「决策」页点击“拍照开始决策”，也可以从相册选择图片。',
+          '确认识别出的名称、分类和描述后，物品会独立保存并直接进入四问。'
+        ]
       },
       {
-        id: 'search-tips',
-        title: '搜索技巧',
-        icon: 'cuIcon-search',
-        expanded: false
+        id: 'decision-questions',
+        title: '四问与六维评分',
+        icon: 'cuIcon-edit',
+        expanded: false,
+        lines: [
+          '固定回答使用频率、重新购买意愿、是否可替代和情感价值四个问题。',
+          '六维分数统一为越高越该留；占用空间分越高代表越省空间。',
+          '是否重复当前用“有替代”答案近似，AI 只给建议，最终决定由你做。'
+        ]
+      },
+      {
+        id: 'observe',
+        title: '30 天观察箱',
+        icon: 'cuIcon-time',
+        expanded: false,
+        lines: [
+          '拿不定主意时选择观察，系统记录 30 天到期日。',
+          '实际用到就点“我用到了”；用到 3 次会提示可以直接留下。',
+          '到期后可留下、处理，或重新查看结论。'
+        ]
+      },
+      {
+        id: 'dispose',
+        title: '出售与处理建议',
+        icon: 'cuIcon-delete',
+        expanded: false,
+        lines: [
+          '出售、转赠、回收和丢弃都有对应的下一步建议。',
+          '出售建议包含估价区间和平台，可以复制文案，完成后标记已处理。'
+        ]
       },
       {
         id: 'common-issues',
         title: '常见问题',
         icon: 'cuIcon-question',
-        expanded: false
+        expanded: false,
+        lines: [
+          '识别不准确：在确认页直接修改名称、分类和描述。',
+          '没有 AI key：演示模式会使用后端规则降级，完整流程仍可走通。',
+          '请求失败：确认后端已启动；真机预览时把 baseUrl 改为电脑局域网地址。'
+        ]
       }
     ]
   },
 
-  onLoad() {
-    console.log('使用帮助页面加载');
-    this.loadHelpContent();
-  },
-
-  /**
-   * 加载帮助内容
-   */
-  loadHelpContent() {
-    // 模拟加载延迟
-    setTimeout(() => {
-      this.setData({
-        loading: false
-      });
-    }, 500);
-  },
-
-  /**
-   * 切换章节展开状态
-   */
   onToggleSection(e) {
-    const sectionId = e.currentTarget.dataset.id;
-    const sections = this.data.sections.map(section => {
-      if (section.id === sectionId) {
-        return { ...section, expanded: !section.expanded };
-      }
-      return section;
+    const id = e.currentTarget.dataset.id;
+    this.setData({
+      sections: this.data.sections.map(section => Object.assign({}, section, {
+        expanded: section.id === id ? !section.expanded : section.expanded
+      }))
     });
-    
-    this.setData({ sections });
-  },
-
+  }
 });

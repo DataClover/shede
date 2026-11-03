@@ -23,8 +23,8 @@ router = APIRouter()
 class AddItemRequest(BaseModel):
     """添加物品请求模型"""
     openid: str = Field(..., description="微信小程序openid")
-    box_id: int = Field(..., description="储物箱ID")
-    bag_id: int = Field(..., description="袋子ID")
+    box_id: Optional[int] = Field(default=None, description="储物箱ID，独立物品可为空")
+    bag_id: Optional[int] = Field(default=None, description="袋子ID，独立物品可为空")
     title: str = Field(..., min_length=1, max_length=200, description="物品标题")
     description: Optional[str] = Field(default="", max_length=1000, description="物品描述")
     category: Optional[str] = Field(default="", max_length=100, description="物品分类")
@@ -53,19 +53,12 @@ def verify_bag_ownership(user_id: int, box_id: int, bag_id: int, db_manager: Dat
     result = db_manager.execute_query(query, (bag_id, box_id, user_id), fetch_one=True)
     return result['count'] > 0
 
-def get_next_sort_id(box_id: int, bag_id: int, db_manager: DatabaseManager) -> int:
-    """
-    获取袋子下一个物品排序ID
-    
-    Args:
-        box_id: 储物箱ID
-        bag_id: 袋子ID（可为空）
-        db_manager: 数据库管理器实例
-        
-    Returns:
-        int: 下一个排序ID
-    """
-    if bag_id:
+def get_next_sort_id(box_id: Optional[int], bag_id: Optional[int], db_manager: DatabaseManager) -> int:
+    """获取同一归属下的下一个物品排序 ID。"""
+    if box_id is None:
+        query = "SELECT COALESCE(MAX(sort_id), 0) + 1 as next_sort_id FROM items_detail WHERE box_id IS NULL AND bag_id IS NULL"
+        result = db_manager.execute_query(query, fetch_one=True)
+    elif bag_id is not None:
         query = "SELECT COALESCE(MAX(sort_id), 0) + 1 as next_sort_id FROM items_detail WHERE box_id = ? AND bag_id = ?"
         result = db_manager.execute_query(query, (box_id, bag_id), fetch_one=True)
     else:
@@ -164,7 +157,7 @@ def process_image_file(user_id: int, image_filename: str) -> Optional[str]:
         # 如果移动失败，返回None
         return None
 
-def create_item(user_id: int, box_id: int, bag_id: int, item_data: AddItemRequest, db_manager: DatabaseManager) -> int:
+def create_item(user_id: int, box_id: Optional[int], bag_id: Optional[int], item_data: AddItemRequest, db_manager: DatabaseManager) -> int:
     """
     创建新物品
     
@@ -266,8 +259,11 @@ async def add_item(item_data: AddItemRequest = Body(...)):
         except ValueError:
             raise HTTPException(status_code=500, detail="用户不存在，请先登录")
         
-        # 验证袋子是否属于该用户的该储物箱
-        if not verify_bag_ownership(user_id, item_data.box_id, item_data.bag_id, db_manager):
+        # 独立物品不传箱袋；沿用旧调用方式时仍校验归属。
+        if (item_data.box_id is None) != (item_data.bag_id is None):
+            raise HTTPException(status_code=400, detail="箱袋参数需同时提供或同时留空")
+        if item_data.box_id is not None and not verify_bag_ownership(
+                user_id, item_data.box_id, item_data.bag_id, db_manager):
             raise HTTPException(status_code=403, detail="无权限在此袋子中添加物品")
         
         # 处理图片文件

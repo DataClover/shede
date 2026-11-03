@@ -2,7 +2,7 @@
   "pages": [
     "pages/splash/splash",
     "pages/home/home",
-    "pages/search/search",
+    "pages/observe/observe",
     "pages/profile/profile"
   ],
   "subPackages": [
@@ -10,18 +10,7 @@
       "root": "packageStorage/",
       "name": "storage",
       "pages": [
-        "pages/box-detail/box-detail",
-        "pages/bag-detail/bag-detail",
-        "pages/item-detail/item-detail",
-        "pages/add-box/add-box",
-        "pages/add-bag/add-bag"
-      ]
-    },
-    {
-      "root": "packageSearch/",
-      "name": "search",
-      "pages": [
-        "pages/search-result/search-result"
+        "pages/item-detail/item-detail"
       ]
     },
     {
@@ -38,7 +27,6 @@
       "pages": [
         "pages/question/question",
         "pages/verdict/verdict",
-        "pages/observe/observe",
         "pages/dispose/dispose"
       ]
     },
@@ -62,7 +50,7 @@
   "window": {
     "backgroundTextStyle": "@backgroundTextStyle",
     "navigationBarBackgroundColor": "@navBackgroundColor",
-    "navigationBarTitleText": "物品管理",
+    "navigationBarTitleText": "舍得",
     "navigationBarTextStyle": "@navTextStyle",
     "backgroundColor": "@backgroundColor",
     "enablePullDownRefresh": false,
@@ -79,9 +67,13 @@
     "list": [
       {
         "pagePath": "pages/home/home",
-        "text": "首页",
+        "text": "决策",
         "iconPath": "assets/icons/home.png",
         "selectedIconPath": "assets/icons/home-active.png"
+      },
+      {
+        "pagePath": "pages/observe/observe",
+        "text": "观察箱"
       },
       {
         "pagePath": "pages/profile/profile",
@@ -91,7 +83,6 @@
       }
     ]
   },
-
   "requiredBackgroundModes": [],
   "sitemapLocation": "sitemap.json",
   "lazyCodeLoading": "requiredComponents"

@@ -355,52 +355,6 @@
   border-color: #007aff;
 }
 
-/* 位置选择器 */
-.location-selector {
-  border: 2rpx solid #e9ecef;
-  border-radius: 12rpx;
-  padding: 20rpx;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  background: white;
-  transition: border-color 0.3s;
-}
-
-.location-selector:active {
-  border-color: #007aff;
-}
-
-.location-display {
-  display: flex;
-  align-items: center;
-  gap: 15rpx;
-  flex: 1;
-}
-
-.location-display .cuIcon-locationfill {
-  font-size: 28rpx;
-}
-
-.location-text {
-  flex: 1;
-}
-
-.location-main {
-  font-size: 28rpx;
-  color: #333;
-}
-
-.location-placeholder {
-  font-size: 28rpx;
-  color: #999;
-}
-
-.location-selector .cuIcon-right {
-  font-size: 24rpx;
-  color: #999;
-}
-
 /* 操作按钮 */
 .action-buttons {
   position: fixed;
@@ -421,222 +375,36 @@
   font-weight: 600;
 }
 
-/* 位置选择器弹窗 */
-.location-picker-mask {
-  position: fixed;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background: rgba(0, 0, 0, 0.5);
-  z-index: 1000;
-  display: flex;
-  align-items: flex-end;
-}
-
-.location-picker-panel {
-  width: 100%;
-  max-height: 80vh;
-  background: white;
-  border-radius: 20rpx 20rpx 0 0;
-  overflow: hidden;
-}
-
-.picker-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 30rpx;
-  border-bottom: 1rpx solid #f0f0f0;
-}
-
-.picker-title {
-  font-size: 32rpx;
-  font-weight: 600;
-  color: #333;
-}
-
-.picker-header .cuIcon-close {
-  font-size: 32rpx;
-  color: #999;
-  padding: 10rpx;
-}
-
-.picker-content {
-  max-height: 60vh;
-  overflow-y: auto;
-  padding: 30rpx;
-}
-
-.picker-section {
-  margin-bottom: 40rpx;
-}
-
-.picker-section:last-child {
-  margin-bottom: 0;
-}
-
-.picker-label {
-  font-size: 28rpx;
-  font-weight: 600;
-  color: #333;
-  margin-bottom: 20rpx;
-}
-
-/* 收纳盒列表 */
-.box-list {
-  display: flex;
-  flex-direction: column;
-  gap: 15rpx;
-}
-
-.box-item {
-  display: flex;
-  align-items: center;
-  gap: 20rpx;
-  padding: 25rpx;
-  border: 2rpx solid #e9ecef;
-  border-radius: 16rpx;
-  background: white;
-  transition: all 0.3s;
-}
-
-.box-item.selected {
-  border-color: #007aff;
-  background: #f0f8ff;
-}
-
-.box-color {
-  width: 60rpx;
-  height: 60rpx;
-  border-radius: 50%;
-}
-
-.box-info {
-  flex: 1;
-}
-
-.box-name {
-  font-size: 28rpx;
-  font-weight: 600;
-  color: #333;
-  margin-bottom: 5rpx;
-}
-
-.box-location {
-  font-size: 24rpx;
-  color: #666;
-}
-
-.box-item .cuIcon-check {
-  font-size: 32rpx;
-}
-
-/* 收纳袋列表 */
-.bag-list {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 15rpx;
-}
-
-.bag-item {
-  display: flex;
-  align-items: center;
-  gap: 15rpx;
-  padding: 20rpx;
-  border: 2rpx solid #e9ecef;
-  border-radius: 16rpx;
-  background: white;
-  transition: all 0.3s;
-}
-
-.bag-item.selected {
-  border-color: #007aff;
-  background: #f0f8ff;
-}
-
-.bag-color {
-  width: 40rpx;
-  height: 40rpx;
-  border-radius: 50%;
-}
-
-.bag-name {
-  font-size: 24rpx;
-  color: #333;
-  flex: 1;
-}
-
-.bag-item .cuIcon-check {
-  font-size: 24rpx;
-}
-
-.picker-actions {
-  padding: 30rpx;
-  border-top: 1rpx solid #f0f0f0;
-}
-
-.picker-actions .cu-btn {
-  width: 100%;
-  height: 80rpx;
-  border-radius: 40rpx;
-  font-size: 28rpx;
-}
-
-/* 响应式设计 */
-@media (max-width: 750rpx) {
-  .recognition-item {
-    min-width: 240rpx;
-  }
-  
-  .bag-list {
-    grid-template-columns: 1fr;
-  }
-}
-
 /* 深色模式适配 */
 @media (prefers-color-scheme: dark) {
   .page-container {
     background: #1a1a1a;
   }
-  
+
   .image-section,
-  .recognition-section,
-  .edit-section,
-  .location-picker-panel {
+  .edit-section {
     background: #2d2d2d;
   }
-  
+
   .section-title,
-  .form-label,
-  .item-name,
-  .box-name,
-  .picker-title {
+  .form-label {
     color: #fff;
   }
-  
+
   .form-input,
   .form-textarea,
-  .picker-text,
-  .location-selector {
+  .picker-text {
     background: #3d3d3d;
     border-color: #4d4d4d;
     color: #fff;
   }
-  
-  .recognition-item,
-  .box-item,
-  .bag-item {
-    background: #3d3d3d;
-    border-color: #4d4d4d;
-  }
-  
+
   .tag {
     background: #3d3d3d;
     border-color: #4d4d4d;
     color: #fff;
   }
-  
+
   .action-buttons {
     background: #2d2d2d;
     border-top-color: #4d4d4d;

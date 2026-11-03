@@ -63,20 +63,23 @@ def _days_left(observe_until: Any) -> int:
 def _decorate(item: Dict[str, Any]) -> Dict[str, Any]:
     left = _days_left(item.get("observe_until"))
     item["days_left"] = left
-    item["expired"] = left <= 0
+    item["expired"] = bool(item.get("observe_until")) and left <= 0
     return item
 
 
 @router.get("/v5/observe/list")
-async def observe_list(openid: str):
-    """观察中的物品（按到期日升序，最急的在前）"""
+async def observe_list(openid: str, status: str = "observing"):
+    """按三态筛选物品；默认仍返回观察中的物品。"""
+    if status not in ("pending", "observing"):
+        raise HTTPException(status_code=400, detail="status 仅支持 pending 或 observing")
     user_id = _user_id(openid)
+    order_by = "observe_until ASC" if status == "observing" else "created_at DESC"
     rows = db_manager.execute_query(
         "SELECT item_id, title, category, image_filename, observe_until, "
         "observe_used_count, last_used_at, ai_verdict, ai_score "
-        "FROM items_detail WHERE status = 'observing' AND (user_id = ? OR user_id IS NULL) "
-        "ORDER BY observe_until ASC",
-        (user_id,)) or []
+        "FROM items_detail WHERE status = ? AND (user_id = ? OR user_id IS NULL) "
+        "ORDER BY " + order_by,
+        (status, user_id)) or []
     items = [_decorate(dict(r)) for r in rows]
     return {
         "status": "success",

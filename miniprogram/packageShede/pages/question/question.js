@@ -1,6 +1,4 @@
-// packageShede/pages/question/question.js
-// 决策前问卷：4 个问题，答完提交 AI 六维分析
-const api = require('../../utils/api.js');
+const api = require('../../../utils/api.js');
 
 Page({
   data: {
@@ -19,79 +17,59 @@ Page({
   },
 
   async loadAll() {
+    wx.showLoading({ title: '加载中...' });
     try {
-      wx.showLoading({ title: '加载中...' });
-      const [qRes, itemRes] = await Promise.all([
+      const [questionData, itemData] = await Promise.all([
         api.request('/v5/decision/questions'),
-        api.request('/v5/decision/item', { data: { openid: api.openid(), item_id: this.data.itemId } })
+        api.request('/v5/decision/item', {
+          data: { openid: api.openid(), item_id: this.data.itemId }
+        })
       ]);
-      wx.hideLoading();
-
-      // 解析成 {usage_answer: 'recent', ...} 便于提交
       const answers = {};
-      (qRes.questions || []).forEach(q => {
-        answers[q.key] = itemRes.item && itemRes.item[q.key] ? itemRes.item[q.key] : '';
+      (questionData.questions || []).forEach(question => {
+        answers[question.key] = itemData.item && itemData.item[question.key] || '';
       });
-
       this.setData({
-        questions: qRes.questions || [],
-        dimLabels: qRes.dim_labels || {},
-        item: itemRes.item || {},
+        questions: questionData.questions || [],
+        item: itemData.item || {},
         answers,
         loading: false
       });
-    } catch (e) {
-      wx.hideLoading();
+    } catch (error) {
       this.setData({ loading: false });
-      api.toastError(e);
+      api.toastError(error);
+    } finally {
+      wx.hideLoading();
     }
   },
 
   onPick(e) {
     const { key, value } = e.currentTarget.dataset;
-    const answers = Object.assign({}, this.data.answers, { [key]: value });
-    this.setData({ answers });
-  },
-
-  // 没答的题给个默认，避免提交被拦
-  buildPayload() {
-    const fill = {
-      usage_answer: 'never',
-      rebuy_answer: 'unsure',
-      replace_answer: 'none',
-      emotion_answer: 'mid'
-    };
-    const answers = Object.assign({}, fill, this.data.answers);
-    return Object.assign({ openid: api.openid(), item_id: this.data.itemId }, answers);
+    this.setData({ answers: Object.assign({}, this.data.answers, { [key]: value }) });
   },
 
   async onSubmit() {
     if (this.data.submitting) return;
-    const missing = this.data.questions.filter(q => !this.data.answers[q.key]).length;
-    if (missing > 0) {
-      const r = await new Promise(resolve => {
-        wx.showModal({
-          title: '还有题没答',
-          content: `还有 ${missing} 题没选，直接用默认答案继续吗？`,
-          confirmText: '继续',
-          cancelText: '回去答题',
-          success: res => resolve(res.confirm)
-        });
-      });
-      if (!r) return;
+    const missing = this.data.questions.filter(question => !this.data.answers[question.key]);
+    if (missing.length) {
+      wx.showToast({ title: `请完成全部 ${this.data.questions.length} 个问题`, icon: 'none' });
+      return;
     }
 
     this.setData({ submitting: true });
+    wx.showLoading({ title: 'AI 分析中...' });
     try {
-      wx.showLoading({ title: 'AI 分析中...' });
-      const result = await api.request('/v5/decision/analyze', { data: this.buildPayload() });
-      wx.hideLoading();
+      const payload = Object.assign({
+        openid: api.openid(),
+        item_id: this.data.itemId
+      }, this.data.answers);
+      const result = await api.request('/v5/decision/analyze', { method: 'POST', data: payload });
       getApp().globalData.shedeResult = result;
-      wx.navigateTo({ url: `/packageShede/pages/verdict/verdict?item_id=${this.data.itemId}` });
-    } catch (e) {
-      wx.hideLoading();
-      api.toastError(e);
+      wx.redirectTo({ url: `/packageShede/pages/verdict/verdict?item_id=${this.data.itemId}` });
+    } catch (error) {
+      api.toastError(error);
     } finally {
+      wx.hideLoading();
       this.setData({ submitting: false });
     }
   }
