@@ -9,8 +9,8 @@ backend/data/
 backend/Photos/
 *.log
 
-# ---- 本地配置（含密钥，绝不入库）----
-backend/config.ini
+# ---- 本地配置 ----
+# 注意：backend/config.ini 按作业要求明文入库（含智谱 key，课程结束后请删除/重置）
 
 # ---- 压缩包/临时 ----
 *.zip
