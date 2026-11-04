@@ -76,6 +76,9 @@ app.add_middleware(
         "https://yourdomain.com",  # 替换为实际的前端域名
         "https://www.yourdomain.com",  # 替换为实际的前端域名
         "https://servicewechat.com",  # 微信小程序官方域名
+        "http://localhost:8000",  # 网页演示版（方案A，配置级改动，非业务逻辑）
+        "http://127.0.0.1:8000",
+        "http://localhost:5173",  # 兼容 Vite dev server 调试
     ],
     allow_credentials=True,  # 生产环境允许携带凭证
     allow_methods=["GET", "POST", "PUT", "DELETE", "OPTIONS"],  # 明确指定允许的方法
@@ -233,9 +236,11 @@ app.include_router(DisposeRouter)
 # 【测试】测试AI返回内容
 # -----------------------------------------------------------
 
-@app.get("/")
-async def read_root():
-    return {'Method': 'API Version: '+ app.version +'. Access Denied, Pls contact Lord. ：）'}
+# 网页演示版（方案A）：静态产物挂到 /，必须在所有 API 路由之后挂载
+import os
+_web_dist = os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", "web_dist")
+if os.path.isdir(_web_dist):
+    app.mount("/", StaticFiles(directory=_web_dist, html=True), name="web")
 
 if __name__ == "__main__":
     # 生产环境启动配置
