@@ -276,7 +276,7 @@ async def health_check():
 
 # 网页演示版（方案A）：静态产物挂到 /，必须在所有 API 路由（含 /health）之后挂载
 import os
-_web_dist = os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", "web_dist")
+_web_dist = os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", "web")
 if os.path.isdir(_web_dist):
     app.mount("/", StaticFiles(directory=_web_dist, html=True), name="web")
 

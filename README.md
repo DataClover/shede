@@ -3,7 +3,7 @@
 > 不是替你扔掉东西，而是帮你想清楚。
 
 微信小程序 + FastAPI + SQLite + 智谱 GLM-4V。
-拍照 → AI 识别 → 回答 2~3 个问题 → AI 六维分析（使用频率 / 是否重复 / 实际需求 /
+拍照 → AI 识别 → 回答 4 个固定问题 → AI 六维分析（使用频率 / 是否重复 / 实际需求 /
 重新购买意愿 / 占用空间 / 情感价值）→ 给出建议与理由 → 用户自己决定
 （留下 / 观察 / 出售或转赠 / 处理）。
 
@@ -16,8 +16,9 @@
 | v0.3.0 | **AI 六维分析接口**：`/v5/decision/questions` + `/v5/decision/analyze` + `/v5/decision/item`，结论写回 `ai_*` | ✅ 已完成 |
 | v0.4.0 | **30 天观察箱**：`/v5/decision/choose` 四选一流转 + `/v5/observe/{list,due,use,overview}` | ✅ 已完成 |
 | v0.5.0 | **处理建议**：`/v5/dispose/{suggest,plan}`（出售文案+估价区间 / 转赠对象 / 回收指引） | ✅ 已完成 |
-| v0.6.0 | 前端四页（question / verdict / observe / dispose） | ⬜ 待做 |
-| v1.0.0 | 首页三态看板 + 与 PPT 完全对齐 | ⬜ 待做 |
+| v0.6.0 | 前端四页（question / verdict / observe / dispose） | ✅ 已完成 |
+| v0.7.0 | **小程序前端改造落地**：决策工作台首页 + 主包观察箱 tab + 删除收纳/搜索入口 | ✅ 已完成 |
+| v0.8.0 | **方案A 网页演示版**：`web/` 纯静态决策流 7 视图，挂后端 `/` 下同源演示 | ✅ 已完成 |
 
 > 说明：v0.1.0 的界面仍然是「收纳工具」形态（储物箱 / 收纳袋 / 物品），
 > 决策层从 v0.2.0 起叠加。这样每一步都有可运行的产物，便于回退与演示。
@@ -28,29 +29,31 @@
 
 1. 双击 `一键启动.bat`（首次会自动建虚拟环境并装依赖，约 20~60 秒）
    看到 `Uvicorn running on http://0.0.0.0:8000` 即成功，**窗口不能关**
-2. 微信开发者工具 → 导入项目 → 目录选 `miniprogram` → AppID 选「测试号」
-3. `详情 → 本地设置` → 勾选「不校验合法域名、web-view、TLS 版本以及 HTTPS 证书」
+2. 网页演示版：浏览器打开 `http://localhost:8000/` 即可走完整决策流
+3. 小程序：微信开发者工具 → 导入项目 → 目录选 `miniprogram` → AppID 选「测试号」，
+   `详情 → 本地设置` → 勾选「不校验合法域名、web-view、TLS 版本以及 HTTPS 证书」
 
-详见 `使用说明.md`。
+详见 `使用说明.md`；答辩现场流程见 `docs/答辩清单.md`。
 
 ## 目录结构
 
 ```
 .
 ├─ 一键启动.bat / 停止服务.bat
-├─ 使用说明.md
-├─ backend/                 FastAPI 后端
-│   ├─ launch.py            入口（挂载 v0~v4 路由）
-│   ├─ config.ini.example   配置模板（含 [demo] 演示开关）
-│   ├─ db_init.py           建表（schema 以此为准）
-│   ├─ _ensure_db.py        启动前自检：旧库就地补列 / 无损重建（不删数据）
-│   ├─ common_db.py / security_utils.py
-│   └─ v*.py                v0 用户 / v1 储物箱 / v2 收纳袋 / v3 物品 / v4 搜索
-└─ miniprogram/             微信小程序
-    ├─ pages/               首页 / 搜索 / 我的
-    ├─ packageCamera/       拍照 + AI 识图确认  ← 决策流复用这里
-    ├─ packageStorage/      储物箱 / 收纳袋 / 物品详情
-    └─ packageSearch/
+├─ README.md / 使用说明.md
+├─ backend/               FastAPI + SQLite 后端
+│   ├─ launch.py          入口（挂载 v0~v5 路由 + web/ 静态托管）
+│   ├─ config.ini.example 配置模板（含 [demo] 演示开关）
+│   ├─ db_init.py         建表（schema 以此为准）
+│   ├─ _ensure_db.py      启动前自检：旧库就地补列 / 无损重建（不删数据）
+│   └─ v*.py              v0 用户 / v1~v2 箱袋（遗留兼容）/ v3 物品识图 / v5 决策·观察·处理
+├─ miniprogram/           微信小程序（产品载体）
+│   ├─ pages/             决策工作台 / 观察箱 / 我的
+│   ├─ packageCamera/     拍照 + AI 识图确认
+│   ├─ packageStorage/    决策详情
+│   └─ packageShede/      四问 / 六维建议 / 处理建议
+├─ web/                   网页演示版（纯静态，无构建，挂后端 / 下）
+└─ docs/                  交接文档（1.md）/ 答辩清单 / 设计文档 PDF
 ```
 
 ## 已知的 4 个「开箱即崩」问题（v0.1.0 已修）
