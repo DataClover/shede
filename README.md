@@ -46,7 +46,7 @@
 │   ├─ config.ini.example 配置模板（含 [demo] 演示开关）
 │   ├─ db_init.py         建表（schema 以此为准）
 │   ├─ _ensure_db.py      启动前自检：旧库就地补列 / 无损重建（不删数据）
-│   └─ v*.py              v0 用户 / v1~v2 箱袋（遗留兼容）/ v3 物品识图 / v5 决策·观察·处理
+│   └─ v*.py              v0 用户 / v3 物品识图 / v5 决策·观察·处理
 ├─ miniprogram/           微信小程序（产品载体）
 │   ├─ pages/             决策工作台 / 观察箱 / 我的
 │   ├─ packageCamera/     拍照 + AI 识图确认

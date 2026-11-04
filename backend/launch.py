@@ -148,51 +148,6 @@ app.include_router(EditNicknameRouter)
 # 【首页】获取用户首页信息
 from v0_get_home_info import router as HomeInfoRouter
 app.include_router(HomeInfoRouter)
-# -----------------------------------------------------------
-# 【 -- 箱子管理 -- 】
-# -----------------------------------------------------------
-# 接口：/v1/box/add  -- 请求方式POST
-# 【储物箱】添加储物箱
-from v1_add_box import router as AddBoxRouter
-app.include_router(AddBoxRouter)
-
-# 接口：/v1/box/delete  -- 请求方式POST
-# 【储物箱】删除储物箱
-from v1_delete_box import router as DeleteBoxRouter
-app.include_router(DeleteBoxRouter)
-
-# 接口：/v1/box/edit  -- 请求方式POST
-# 【储物箱】编辑储物箱
-from v1_edit_box import router as EditBoxRouter
-app.include_router(EditBoxRouter)
-
-# 接口：/v1/box/get  -- 请求方式GET
-# 【储物箱】获取储物箱详细信息
-from v1_get_box import router as GetBoxRouter
-app.include_router(GetBoxRouter)
-
-# -----------------------------------------------------------
-# 【 -- 袋子管理 -- 】
-# -----------------------------------------------------------
-# 接口：/v2/bag/add  -- 请求方式POST
-# 【袋子】添加袋子
-from v2_add_bag import router as AddBagRouter
-app.include_router(AddBagRouter)
-
-# 接口：/v2/bag/delete  -- 请求方式POST
-# 【袋子】删除袋子
-from v2_delete_bag import router as DeleteBagRouter
-app.include_router(DeleteBagRouter)
-
-# 接口：/v2/bag/get  -- 请求方式GET
-# 【袋子】获取袋子信息
-from v2_get_bag import router as GetBagRouter
-app.include_router(GetBagRouter)
-
-# 接口：/v2/bag/edit  -- 请求方式POST
-# 【袋子】编辑袋子
-from v2_edit_bag import router as EditBagRouter
-app.include_router(EditBagRouter)
 
 # -----------------------------------------------------------
 # 【 -- 物品管理 -- 】
@@ -221,14 +176,6 @@ app.include_router(GetItemRouter)
 # 【物品】编辑物品
 from v3_edit_item import router as EditItemRouter
 app.include_router(EditItemRouter)
-
-# -----------------------------------------------------------
-# 【 -- v4版本 - 通用搜索接口 -- 】
-# -----------------------------------------------------------
-# 接口：/v4/search  -- 请求方式GET
-# 【搜索】通用搜索接口
-from v4_search import router as SearchRouter
-app.include_router(SearchRouter)
 
 # -----------------------------------------------------------
 # 【 -- v5版本 - 舍得决策层 -- 】
