@@ -3,11 +3,11 @@ function openid() {
   return globalData.openid || wx.getStorageSync('openid') || '';
 }
 
-function request(path, options) {
+async function request(path, options) {
   const opts = options || {};
   const method = (opts.method || 'GET').toUpperCase();
   const data = opts.data || null;
-  const baseUrl = getApp().globalData.baseUrl.replace(/\/+$/, '');
+  const baseUrl = (await getApp().resolveBaseUrl()).replace(/\/+$/, '');
   let url = baseUrl + '/' + String(path).replace(/^\/+/, '');
 
   if (method === 'GET' && data) {

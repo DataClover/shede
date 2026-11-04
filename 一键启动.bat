@@ -42,6 +42,10 @@ if errorlevel 1 goto :fail
 
 echo [4/4] starting server on http://localhost:8000 ...
 echo.
+echo   phone / other device on the same Wi-Fi, use:
+powershell -NoProfile -Command "Get-NetIPAddress -AddressFamily IPv4 | Where-Object { $_.IPAddress -notlike '127.*' -and $_.IPAddress -notlike '169.254.*' -and $_.InterfaceAlias -notmatch 'VMware|Loopback|Bluetooth|vEthernet' } | ForEach-Object { Write-Host ('     ' + $_.IPAddress + ':8000/  (' + $_.InterfaceAlias + ')') }"
+echo.
+echo.
 echo   keep this window open. press Ctrl+C or run stop.bat to stop.
 echo.
 ".venv\Scripts\python.exe" -m uvicorn launch:app --host 0.0.0.0 --port 8000

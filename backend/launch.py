@@ -21,10 +21,13 @@
 """
 import uvicorn
 from configparser import ConfigParser
-from fastapi import FastAPI
+from fastapi import FastAPI, Request
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.staticfiles import StaticFiles
 import logging
+import os
+import time
+from datetime import datetime
 from contextlib import asynccontextmanager
 
 LOG_FMT = "%(asctime)s - %(levelname)s - %(message)s"
@@ -95,6 +98,32 @@ app.add_middleware(
 
 # 配置静态文件服务 - 用于访问photos目录中的图片
 app.mount("/Photos", StaticFiles(directory="Photos"), name="Photos")
+
+# -----------------------------------------------------------
+# 【 -- 访问日志落盘 -- 】排查真机连不上/卡启动页时看 logs/access.log
+# -----------------------------------------------------------
+LOG_DIR = os.path.join(os.path.dirname(os.path.abspath(__file__)), "logs")
+os.makedirs(LOG_DIR, exist_ok=True)
+ACCESS_LOG = os.path.join(LOG_DIR, "access.log")
+
+
+@app.middleware("http")
+async def log_requests(request: Request, call_next):
+    started = time.time()
+    response = await call_next(request)
+    cost_ms = (time.time() - started) * 1000
+    try:
+        client = request.client.host if request.client else "-"
+        query = ("?" + request.url.query) if request.url.query else ""
+        ua = (request.headers.get("user-agent") or "-")[:70]
+        with open(ACCESS_LOG, "a", encoding="utf-8") as f:
+            f.write("%s  %-15s %-4s %s%s -> %s  %.1fms  UA=%s\n" % (
+                datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
+                client, request.method, request.url.path, query,
+                response.status_code, cost_ms, ua))
+    except Exception:
+        pass  # 日志写入失败不能影响业务
+    return response
 
 # -----------------------------------------------------------
 # 【 -- v1版本 -- 第一代后台版本 -- 】
@@ -236,7 +265,16 @@ app.include_router(DisposeRouter)
 # 【测试】测试AI返回内容
 # -----------------------------------------------------------
 
-# 网页演示版（方案A）：静态产物挂到 /，必须在所有 API 路由之后挂载
+@app.get("/health")
+async def health_check():
+    # 【系统】健康检查探针：供启动脚本/监控定时轮询，返回 200 即表示服务存活
+    return {
+        'status': 'ok',
+        'version': app.version,
+        'time': datetime.now().strftime('%Y-%m-%d %H:%M:%S'),
+    }
+
+# 网页演示版（方案A）：静态产物挂到 /，必须在所有 API 路由（含 /health）之后挂载
 import os
 _web_dist = os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", "web_dist")
 if os.path.isdir(_web_dist):

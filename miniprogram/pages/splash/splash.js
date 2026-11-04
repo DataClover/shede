@@ -24,8 +24,13 @@ Page({
       await this.checkSystemEnvironment();
       
       // 步骤2: 初始化用户数据
-      this.updateProgress('初始化用户数据...', 50);
-      await this.initializeUserData();
+      this.updateProgress('正在探测后端地址...', 45);
+      const baseUrl = await app.resolveBaseUrl();
+      this.updateProgress('连接 ' + baseUrl + ' ...', 50);
+      console.log('[splash] 开始请求后端', baseUrl, Date.now());
+      await this.withTimeout(this.initializeUserData(baseUrl), 15000,
+        `连接后端超时（15 秒无响应）：${baseUrl}`);
+      console.log('[splash] 后端请求完成', Date.now());
       
       // 步骤3: 预加载资源
       this.updateProgress('预加载资源...', 80);
@@ -50,6 +55,20 @@ Page({
     this.setData({
       loadingText: text,
       progress: progress
+    });
+  },
+
+  /*** 给任意 Promise 加硬超时，保证启动页不会无限卡住   */
+  withTimeout(promise, ms, message) {
+    return new Promise((resolve, reject) => {
+      const timer = setTimeout(() => {
+        console.warn('[splash] 触发超时', message, Date.now());
+        reject(new Error(message));
+      }, ms);
+      promise.then(
+        (value) => { clearTimeout(timer); resolve(value); },
+        (error) => { clearTimeout(timer); reject(error); }
+      );
     });
   },
 
@@ -81,7 +100,7 @@ Page({
   },
 
   /*** 初始化用户数据   */
-  async initializeUserData() {
+  async initializeUserData(resolvedBaseUrl) {
     try {
       // 等待获取openid
       let openid = app.globalData.openid;
@@ -93,8 +112,8 @@ Page({
       }
       //console.log('获取到openid:', openid);
       
-      // 获取baseUrl
-      const baseUrl = app.globalData.baseUrl;
+      // 获取baseUrl（用启动时探测到的地址；没传则退回全局值）
+      const baseUrl = resolvedBaseUrl || app.globalData.baseUrl;
       
       // 调用后台接口获取用户信息
       const userHomeData = await this.fetchUserHomeData(baseUrl, openid);
@@ -118,8 +137,9 @@ Page({
       wx.request({
         url: url,
         method: 'GET',
+        timeout: 12000,
         success: (res) => {
-          console.log('后台接口响应:', res);
+          console.log('[splash] 收到响应', res.statusCode, Date.now(), res.data);
           
           if (res.statusCode === 200 && res.data) {
             resolve(res.data);
@@ -128,8 +148,8 @@ Page({
           }
         },
         fail: (error) => {
-          console.error('接口请求失败:', error);
-          reject(error);
+          console.error('[splash] 请求失败', error && error.errMsg, Date.now(), error);
+          reject(new Error(`连不上后端 ${baseUrl}，请确认：服务已启动、手机与电脑在同一 Wi-Fi、防火墙放行了 8000 端口`));
         }
       });
     });
@@ -182,7 +202,7 @@ Page({
   handleInitializationError(error) {
     this.setData({
       showError: true,
-      errorMessage: error.message +'，请联系作者' || '初始化失败，请重试'
+      errorMessage: (error && error.message) ? error.message : '初始化失败，请重试'
     });
   },
 
@@ -196,6 +216,25 @@ Page({
     });
     
     this.startInitialization();
+  },
+
+  /*** 手动设置后端地址（连不上时兜底）   */
+  onManualConfig() {
+    const app = getApp();
+    wx.showModal({
+      title: '设置后端地址',
+      editable: true,
+      content: app.globalData.baseUrl,
+      placeholderText: '例如 http://192.168.1.4:8000/',
+      success: (res) => {
+        if (!res.confirm) return;
+        if (app.setBaseUrl(res.content)) {
+          this.onRetry();
+        } else {
+          wx.showToast({ title: '地址格式不正确', icon: 'none' });
+        }
+      }
+    });
   },
 
   /*** 跳转到首页   */

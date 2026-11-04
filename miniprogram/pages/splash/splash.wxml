@@ -55,6 +55,9 @@
         <text class="cuIcon-refresh margin-right-xs"></text>
         重试
       </button>
+      <button class="cu-btn line-blue retry-btn manual-btn" bindtap="onManualConfig">
+        手动设置后端地址
+      </button>
     </view>
   </view>
 

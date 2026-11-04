@@ -1,4 +1,10 @@
 // app.js
+
+const { CANDIDATES } = require('./utils/config.js');
+
+// 后端地址的解析结果只算一次，多个页面共用同一个 Promise
+let baseUrlPromise = null;
+
 App({
   /**
    * 全局数据
@@ -8,9 +14,8 @@ App({
     userInfo: null,
     systemReady: false,
     userDataReady: false,
-    // 后台接口基础URL
-    // 本机演示用 localhost；真机预览改成电脑的局域网 IP，例如 http://192.168.1.10:8000/
-    baseUrl: 'http://localhost:8000/',
+    // 后端地址：先给候选列表第一个，启动时由 resolveBaseUrl() 探测后覆盖
+    baseUrl: CANDIDATES[0] || 'http://localhost:8000/',
     // 演示模式：true = 不调用 wx.login，直接用固定 openid（无需小程序 AppID）
     // 有真实小程序账号后改成 false，即走真实微信登录
     demoMode: true,
@@ -27,21 +32,32 @@ App({
    */
   async onLaunch() {
     console.log('小程序启动');
+
+    // 网络变化（断 Wi-Fi、换网络、路由器重新分配 IP）后重新探测后端地址
+    if (wx.onNetworkStatusChange) {
+      wx.onNetworkStatusChange((res) => {
+        console.log('[app] 网络状态变化', res);
+        baseUrlPromise = null;
+      });
+    }
     
     try {
       // 1. 获取系统信息
       await this.getSystemInfo();
       
-      // 2. 获取用户openid
+      // 2. 探测可用的后端地址（换网络后自动切换）
+      await this.resolveBaseUrl();
+      
+      // 3. 获取用户openid
       await this.getOpenId();
       
-      // 3. 预加载用户基础数据
+      // 4. 预加载用户基础数据
       await this.preloadUserData();
       
-      // 4. 标记系统就绪
+      // 5. 标记系统就绪
       this.globalData.systemReady = true;
       
-      // 5. 通知所有等待的页面
+      // 6. 通知所有等待的页面
       this.notifyPagesReady();
       
       console.log('系统初始化完成');
@@ -90,6 +106,73 @@ App({
         resolve({});
       }
     });
+  },
+
+  /**
+   * 解析后端地址：先试本地缓存的地址，再按顺序探测候选列表
+   * 结果只计算一次，页面/工具函数可以重复调用
+   */
+  resolveBaseUrl() {
+    if (!baseUrlPromise) {
+      baseUrlPromise = this.detectBaseUrl();
+    }
+    return baseUrlPromise;
+  },
+
+  async detectBaseUrl() {
+    const candidates = [];
+    const cached = wx.getStorageSync('baseUrl');
+    if (cached) candidates.push(cached);
+    (CANDIDATES || []).forEach((url) => {
+      if (url && candidates.indexOf(url) === -1) candidates.push(url);
+    });
+    if (!candidates.length) candidates.push('http://localhost:8000/');
+
+    for (let i = 0; i < candidates.length; i++) {
+      const url = candidates[i];
+      const ok = await this.pingBaseUrl(url);
+      console.log('[app] 探测后端地址', url, ok ? 'OK' : '不可用');
+      if (ok) {
+        this.globalData.baseUrl = url;
+        wx.setStorageSync('baseUrl', url);
+        return url;
+      }
+    }
+
+    // 全部不可用：先用第一个，让后续请求把真实错误暴露在启动页上
+    this.globalData.baseUrl = candidates[0];
+    console.warn('[app] 所有候选地址都不可用，暂用', candidates[0]);
+    return candidates[0];
+  },
+
+  pingBaseUrl(url) {
+    return new Promise((resolve) => {
+      wx.request({
+        url: url.replace(/\/+$/, '') + '/health',
+        method: 'GET',
+        timeout: 2500,
+        success: (res) => resolve(res.statusCode === 200),
+        fail: () => resolve(false)
+      });
+    });
+  },
+
+  /**
+   * 手动设置后端地址（启动页连不上时用）
+   * 成功返回 true，格式不对返回 false
+   */
+  setBaseUrl(url) {
+    let next = String(url || '').trim();
+    if (!next) return false;
+    if (!/^https?:\/\//i.test(next)) next = 'http://' + next;
+    if (!/^https?:\/\/[^\s/]+/i.test(next)) return false;
+    next = next.replace(/\/+$/, '') + '/';
+
+    wx.setStorageSync('baseUrl', next);
+    this.globalData.baseUrl = next;
+    baseUrlPromise = Promise.resolve(next);
+    console.log('[app] 后端地址已设置为', next);
+    return true;
   },
 
   /**
@@ -158,6 +241,7 @@ App({
       wx.request({
         url: this.globalData.baseUrl + 'auth/login',
         method: 'POST',
+        timeout: 12000,
         header: {
           'content-type': 'application/json'
         },
@@ -193,6 +277,7 @@ App({
       wx.request({
         url: `${baseUrl}/v0/home/info?openid=${encodeURIComponent(openid)}`,
         method: 'GET',
+        timeout: 12000,
         success: res => {
           if (res.statusCode === 200 && res.data) {
             resolve(res.data.data || {});
@@ -200,7 +285,7 @@ App({
             reject(new Error('用户初始化失败'));
           }
         },
-        fail: () => reject(new Error('无法连接后端，请确认服务已启动'))
+        fail: () => reject(new Error(`连不上后端 ${this.globalData.baseUrl}，请确认服务已启动、手机与电脑在同一 Wi-Fi`))
       });
     });
     this.globalData.userInfo = userData.user_info || null;
