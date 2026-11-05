@@ -1,7 +1,7 @@
 # FastAPI 后台服务配置段落
 [fastapi]
-title=广州公有云 - 个人物品收纳整理
-description=这里是私有化的后台回调函数，有问题请联系：Lord
+title=舍得 · AI 断舍离决策助手
+description=拍照识物 → 四问 → 六维建议 → 四选一 → 观察箱/处理建议
 version=1.0.0
 docs_url=/docs
 redoc_url=/redocs
