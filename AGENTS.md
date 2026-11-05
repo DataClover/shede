@@ -37,7 +37,7 @@
 
 - **KEY 只写进本机 `backend/config.ini`，绝不提交、绝不推送到仓库。**
 - 仓库里只保留 `backend/config.ini.example`（占位符 `YOUR API KEY`），这是分发基线。
-- 操作：拿到真 key 后，编辑 `backend/config.ini`，把 `zhipu_api_key = YOUR API KEY` 改成真 key（只改本机，不进 git）。
+- 操作：刚克隆的仓库里 `backend/config.ini` 尚不存在，先复制 `config.ini.example` 为 `config.ini`，再把 `zhipu_api_key = YOUR API KEY` 改成真 key（只改本机，不进 git）。
 - 走演示模式则不改，保持占位即可，脚本自动走 mock/规则兜底。
 
 ## 5. 报错应对表（用户贴报错原文时，按此回答）
