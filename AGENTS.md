@@ -64,6 +64,7 @@
 - **KEY 绝不进仓库/进 git**（只进本地 `backend/config.ini`）；
 - 不修改 `miniprogram/`（小程序是产品载体，本次只部署网页版 + 后端）；
 - 不让用户把 `.venv` / `data` / `Photos` 提交进 git；
+- `docs/references/` 是**只读参考资料**（设计 PPT 等事实锚点），只能查阅引用，绝不修改；可变契约文档在 `docs/contracts/`；
 - 不确定的事就说“这一步需要项目作者确认”，不要编造。
 
 ## 8. 汇报格式

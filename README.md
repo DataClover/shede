@@ -33,7 +33,7 @@
 3. 小程序：微信开发者工具 → 导入项目 → 目录选 `miniprogram` → AppID 选「测试号」，
    `详情 → 本地设置` → 勾选「不校验合法域名、web-view、TLS 版本以及 HTTPS 证书」
 
-详见 `使用说明.md`；答辩现场流程见 `docs/答辩清单.md`。
+详见 `使用说明.md`；答辩现场流程见 `docs/contracts/doc_答辩清单.md`。
 
 ## 目录结构
 
@@ -53,7 +53,9 @@
 │   ├─ packageStorage/    决策详情
 │   └─ packageShede/      四问 / 六维建议 / 处理建议
 ├─ web/                   网页演示版（纯静态，无构建，挂后端 / 下）
-└─ docs/                  交接文档（1.md）/ 答辩清单 / 设计文档 PDF
+└─ docs/
+    ├─ references/        只读参考资料（设计 PPT 等，AI 不得修改）
+    └─ contracts/         可变契约文档（答辩清单 / Q&A / UI 清单 / 语义对齐记录）
 ```
 
 ## 已知的 4 个「开箱即崩」问题（v0.1.0 已修）
