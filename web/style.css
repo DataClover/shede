@@ -384,8 +384,23 @@ body {
   flex-shrink: 0;
 }
 .item-info { flex: 1; min-width: 0; }
-.item-title { font-size: 15px; font-weight: 600; letter-spacing: .01em; }
-.item-meta { font-size: 12px; color: var(--text-sub); margin-top: 4px; letter-spacing: .02em; }
+.item-title {
+  font-size: 15px;
+  font-weight: 600;
+  letter-spacing: .01em;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.item-meta {
+  font-size: 12px;
+  color: var(--text-sub);
+  margin-top: 4px;
+  letter-spacing: .02em;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
 .item-meta .expired { color: var(--red); font-weight: 600; }
 
 /* ========== 标签 chip ========== */

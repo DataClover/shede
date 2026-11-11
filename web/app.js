@@ -93,8 +93,13 @@ async function api(path, { method = 'GET', data, formData } = {}) {
   }
 
   let body;
-  try { body = await resp.json(); } catch (e) { throw new Error('服务响应异常（HTTP ' + resp.status + '）'); }
-  if (!resp.ok) throw new Error(body.detail || body.message || ('HTTP ' + resp.status));
+  try { body = await resp.json(); } catch (e) { throw new Error('服务开小差了，请稍后再试'); }
+  if (!resp.ok) {
+    if (resp.status >= 500) throw new Error('服务开小差了，请稍后再试');
+    const detail = body.detail || body.message || '';
+    // 4xx 业务错误：保留中文业务提示；英文堆栈/缺失则给兜底文案
+    throw new Error(/[\u4e00-\u9fa5]/.test(detail) ? detail : '请求没有成功，请再试一次');
+  }
   if (body.status === 'error') throw new Error(body.message || '请求失败');
   return body.data !== undefined ? body.data : body;
 }
