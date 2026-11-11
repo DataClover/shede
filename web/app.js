@@ -179,7 +179,21 @@ async function viewHome() {
     }).join('');
   }
   html += '</div>';
+
+  if (OFFLINE) {
+    html += '<div class="section-gap">' +
+      '<button class="btn btn-outline btn-block" onclick="resetDemo()">重置演示数据（恢复初始示例）</button></div>';
+  }
+
   app.innerHTML = html;
+}
+
+function resetDemo() {
+  if (!confirm('将清空当前所有物品，恢复为初始示例数据？')) return;
+  window.SHEDE_OFFLINE.reset();
+  toast('已恢复初始示例');
+  go('#/');
+  route();
 }
 
 // ---------- 视图 2：拍照识物 ----------

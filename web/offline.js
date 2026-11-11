@@ -131,6 +131,94 @@
     return null;
   }
 
+  // ---------- 初始演示数据 ----------
+
+  // 用简洁线条图代替照片，避免占位空框，也不依赖任何外部图片
+  function svgIcon(inner) {
+    var s = '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120">' +
+      '<rect width="120" height="120" fill="#f3f0ea"/>' + inner + '</svg>';
+    return 'data:image/svg+xml;charset=utf-8,' + encodeURIComponent(s);
+  }
+
+  var BUILTIN_IMAGES = {
+    'sample_mug.svg': svgIcon(
+      '<path d="M36 42h44v38a10 10 0 0 1-10 10H46a10 10 0 0 1-10-10z" fill="none" stroke="#948a7c" stroke-width="3" stroke-linejoin="round"/>' +
+      '<path d="M80 52h7a9 9 0 0 1 0 18h-7" fill="none" stroke="#948a7c" stroke-width="3"/>'
+    ),
+    'sample_earphone.svg': svgIcon(
+      '<path d="M32 68a28 28 0 0 1 56 0" fill="none" stroke="#948a7c" stroke-width="3" stroke-linecap="round"/>' +
+      '<rect x="26" y="64" width="13" height="24" rx="6.5" fill="none" stroke="#948a7c" stroke-width="3"/>' +
+      '<rect x="81" y="64" width="13" height="24" rx="6.5" fill="none" stroke="#948a7c" stroke-width="3"/>'
+    ),
+    'sample_bottle.svg': svgIcon(
+      '<rect x="48" y="26" width="24" height="11" rx="2" fill="none" stroke="#948a7c" stroke-width="3"/>' +
+      '<rect x="42" y="37" width="36" height="52" rx="5" fill="none" stroke="#948a7c" stroke-width="3"/>' +
+      '<path d="M42 58h36" stroke="#948a7c" stroke-width="2" stroke-dasharray="4 4"/>'
+    )
+  };
+
+  // 三条样本覆盖看板三种状态：观察中 / 待决策 / 已决定
+  var SEED_SPECS = [
+    {
+      title: '多余的马克杯',
+      category: '生活用品',
+      description: '柜子里已经有四个杯子，这个是活动赠品。',
+      image: 'sample_mug.svg',
+      status: 'observing',
+      answers: { usage_answer: 'long', rebuy_answer: 'unsure', replace_answer: 'has', emotion_answer: 'mid' }
+    },
+    {
+      title: '旧蓝牙耳机',
+      category: '电子产品',
+      description: '用了三年的入耳式耳机，右耳偶尔断连。',
+      image: 'sample_earphone.svg',
+      status: 'pending',
+      answers: null
+    },
+    {
+      title: '过期的护肤品',
+      category: '美妆个护',
+      description: '开封超过一年，已经不建议继续使用。',
+      image: 'sample_bottle.svg',
+      status: 'resolved',
+      decision: 'discard',
+      answers: { usage_answer: 'never', rebuy_answer: 'no', replace_answer: 'broken', emotion_answer: 'low' }
+    }
+  ];
+
+  function seedDemo() {
+    if (DB.seeded || DB.items.length) { DB.seeded = true; return; }
+    SEED_SPECS.forEach(function (spec) {
+      DB.seq += 1;
+      var item = {
+        item_id: DB.seq,
+        title: spec.title,
+        description: spec.description,
+        category: spec.category,
+        image_filename: spec.image,
+        status: spec.status,
+        ai_verdict: null,
+        ai_score: null,
+        ai_reason: '',
+        ai_dims: null,
+        decision: spec.decision || null,
+        observe_until: spec.status === 'observing' ? fmtDate(addDays(today(), 30)) : null,
+        observe_used_count: 0,
+        created_at: fmtDate(today())
+      };
+      if (spec.answers) {
+        var dims = ruleDims(spec.answers);
+        item.ai_dims = dims;
+        item.ai_score = weighted(dims);
+        item.ai_verdict = verdictOf(item.ai_score);
+        item.ai_reason = ruleReason(dims);
+      }
+      DB.items.push(item);
+    });
+    DB.seeded = true;
+    save();
+  }
+
   // ---------- 日期 ----------
 
   function today() {
@@ -397,20 +485,24 @@
 
   var OFFLINE = location.protocol === 'file:';
 
+  seedDemo(); // 首次进入放三条样本，打开就有内容可看
+
   window.SHEDE_OFFLINE = {
     handle: handle,
     isOffline: function () { return OFFLINE; },
     markOffline: function () { OFFLINE = true; },
-    imgUrl: function (fn) { return IMG_MEM[fn] || ''; },
+    imgUrl: function (fn) { return IMG_MEM[fn] || BUILTIN_IMAGES[fn] || ''; },
     /** 直接把示例物品写进 capture，跳过选图 */
     sampleCapture: function () {
       var rec = pickRecognition();
       var id = 'demo_sample_' + Date.now() + '.jpg';
       return Promise.resolve({ image_filename: id, analysis_result: rec, source: 'demo' });
     },
+    /** 恢复初始示例数据 */
     reset: function () {
-      DB = { items: [], seq: 0 };
+      DB = { items: [], seq: 0, seeded: false };
       try { localStorage.removeItem(LS_KEY); } catch (e) { /* ignore */ }
+      seedDemo();
     }
   };
 })();
