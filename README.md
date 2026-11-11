@@ -25,13 +25,11 @@
 
 ## 快速开始
 
-前置：Python 3.11+、微信开发者工具（稳定版）
+前置：Python 3.11+
 
 1. 双击 `一键启动.bat`（首次会自动建虚拟环境并装依赖，约 20~60 秒）
    看到 `Uvicorn running on http://0.0.0.0:8000` 即成功，**窗口不能关**
 2. 网页演示版：浏览器打开 `http://localhost:8000/` 即可走完整决策流
-3. 小程序：微信开发者工具 → 导入项目 → 目录选 `miniprogram` → AppID 选「测试号」，
-   `详情 → 本地设置` → 勾选「不校验合法域名、web-view、TLS 版本以及 HTTPS 证书」
 
 详见 `使用说明.md`；答辩现场流程见 `docs/contracts/doc_答辩手册.md`。
 
@@ -47,11 +45,6 @@
 │   ├─ db_init.py         建表（schema 以此为准）
 │   ├─ _ensure_db.py      启动前自检：旧库就地补列 / 无损重建（不删数据）
 │   └─ v*.py              v0 用户 / v3 物品识图 / v5 决策·观察·处理
-├─ miniprogram/           微信小程序（产品载体）
-│   ├─ pages/             决策工作台 / 观察箱 / 我的
-│   ├─ packageCamera/     拍照 + AI 识图确认
-│   ├─ packageStorage/    决策详情
-│   └─ packageShede/      四问 / 六维建议 / 处理建议
 ├─ web/                   网页演示版（纯静态，无构建，挂后端 / 下）
 └─ docs/
     ├─ references/        只读参考资料（设计 PPT 等，AI 不得修改）
