@@ -74,10 +74,10 @@ QUESTIONS = [
     },
     {
         "key": "emotion_answer",
-        "title": "它对你有多重要（情感/纪念）？",
+        "title": "想到要扔掉它，你心里是什么感觉？",
         "options": [
-            {"value": "high", "label": "很重要"},
-            {"value": "mid", "label": "一般"},
+            {"value": "high", "label": "舍不得，它有故事"},
+            {"value": "mid", "label": "有点感觉，但还好"},
             {"value": "low", "label": "没什么感觉"},
         ],
     },
@@ -94,8 +94,8 @@ _SCORE_MAP = {
 WEIGHTS = {"usage": 0.25, "need": 0.20, "rebuy": 0.15,
            "duplicate": 0.15, "space": 0.10, "emotion": 0.15}
 
-DIM_LABELS = {"usage": "使用频率", "duplicate": "是否重复", "need": "实际需求",
-              "rebuy": "重新购买意愿", "space": "占用空间", "emotion": "情感价值"}
+DIM_LABELS = {"usage": "平时用得多吗", "duplicate": "有没有能顶替的", "need": "真的需要它吗",
+              "rebuy": "没了会再买吗", "space": "它占地方吗", "emotion": "舍不得它吗"}
 
 
 class AnalyzeRequest(BaseModel):
@@ -155,11 +155,11 @@ def _rule_reason(dims: Dict[str, int]) -> str:
     if dims["duplicate"] <= 40:
         parts.append("手边有东西能替代它")
     if dims["emotion"] >= 85:
-        parts.append("但情感价值很高")
+        parts.append("但它承载了不少回忆，舍不得也正常")
     elif dims["emotion"] <= 20:
-        parts.append("对你也谈不上纪念意义")
+        parts.append("你心里对它其实没什么牵挂")
     if not parts:
-        parts.append("各项指标都不算极端")
+        parts.append("各方面都不算极端，难怪你会纠结")
     return "，".join(parts) + "。"
 
 

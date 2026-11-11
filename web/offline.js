@@ -44,10 +44,10 @@
     },
     {
       key: 'emotion_answer',
-      title: '它对你有多重要（情感/纪念）？',
+      title: '想到要扔掉它，你心里是什么感觉？',
       options: [
-        { value: 'high', label: '很重要' },
-        { value: 'mid', label: '一般' },
+        { value: 'high', label: '舍不得，它有故事' },
+        { value: 'mid', label: '有点感觉，但还好' },
         { value: 'low', label: '没什么感觉' }
       ]
     }
@@ -63,8 +63,8 @@
   var WEIGHTS = { usage: 0.25, need: 0.20, rebuy: 0.15, duplicate: 0.15, space: 0.10, emotion: 0.15 };
 
   var DIM_LABELS = {
-    usage: '使用频率', duplicate: '是否重复', need: '实际需求',
-    rebuy: '重新购买意愿', space: '占用空间', emotion: '情感价值'
+    usage: '平时用得多吗', duplicate: '有没有能顶替的', need: '真的需要它吗',
+    rebuy: '没了会再买吗', space: '它占地方吗', emotion: '舍不得它吗'
   };
 
   var DEMO_RECOGNITIONS = [
@@ -77,31 +77,31 @@
 
   var DISPOSE_TPL = {
     sell: {
-      title_text: '出售建议',
+      title_text: '给它找个新主人',
       price_range: { min: 20, max: 80 },
       platforms: ['闲鱼', '转转'],
       body_text: '【闲置转让】功能正常，成色自用，具体可私聊看细节。同城可自提，异地走快递，价格可小刀。',
       tips: ['拍 3~5 张实物图（正面、细节、瑕疵）更容易成交', '定价参考平台同类成交价，别按原价挂', '如实描述瑕疵，避免售后纠纷']
     },
     gift: {
-      title_text: '转赠建议',
+      title_text: '送给需要它的人',
       price_range: null,
       platforms: ['朋友圈', '小区闲置群'],
       body_text: '【免费转赠】东西还能用，扔了可惜。有需要的朋友自取，同城优先，先到先得。',
       tips: ['写清尺寸、成色和自提地点', '送给真正用得上的人，避免二次闲置', '当面交付时可以顺便聊聊它的用法']
     },
     recycle: {
-      title_text: '回收建议',
+      title_text: '让它物尽其用',
       price_range: { min: 0, max: 20 },
       platforms: ['爱回收', '小区回收点'],
       body_text: '【环保回收】物品已无法正常使用，交给正规回收渠道处理，避免随意丢弃污染环境。',
       tips: ['电子产品先清空个人数据', '电池、灯管等属于有害垃圾，需单独投放', '可攒一批一起回收，更省事']
     },
     discard: {
-      title_text: '丢弃建议',
+      title_text: '好好和它告别',
       price_range: null,
       platforms: ['社区垃圾分类点'],
-      body_text: '【垃圾分类】物品已无使用价值，按当地分类标准投放。',
+      body_text: '它陪过你一段日子，现在可以安心说再见了：按当地分类标准投放就好。',
       tips: ['先确认是否属于可回收物', '尖锐物品包好再扔，避免划伤清洁人员', '能拆解的尽量拆开分类']
     }
   };
@@ -252,9 +252,9 @@
     if (d.usage <= 35) parts.push('很久没用了');
     else if (d.usage >= 65) parts.push('最近还在用');
     if (d.duplicate <= 40) parts.push('手边有东西能替代它');
-    if (d.emotion >= 85) parts.push('但情感价值很高');
-    else if (d.emotion <= 20) parts.push('对你也谈不上纪念意义');
-    if (!parts.length) parts.push('各项指标都不算极端');
+    if (d.emotion >= 85) parts.push('但它承载了不少回忆，舍不得也正常');
+    else if (d.emotion <= 20) parts.push('你心里对它其实没什么牵挂');
+    if (!parts.length) parts.push('各方面都不算极端，难怪你会纠结');
     return parts.join('，') + '。';
   }
 
@@ -449,8 +449,8 @@
       it4.observe_used_count = (it4.observe_used_count || 0) + 1;
       save();
       var n = it4.observe_used_count;
-      var hint = n >= 3 ? '这件东西你观察期内用了 ' + n + ' 次，看来是真需要'
-        : '已记录，观察期内用了 ' + n + ' 次';
+      var hint = n >= 3 ? '这阵子你用了它 ' + n + ' 次，看来是真离不开'
+        : '记下了，这期间用了 ' + n + ' 次';
       return { observe_used_count: n, hint: hint };
     }
 
