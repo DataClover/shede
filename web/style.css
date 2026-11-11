@@ -228,7 +228,7 @@ body {
   display: flex;
   justify-content: center;
   gap: 32px;
-  margin-bottom: 24px;
+  margin-bottom: 32px;
   padding: 4px 0;
 }
 .stat {
@@ -561,8 +561,31 @@ body {
 .platforms { font-size: 13px; color: var(--text-sub); margin-bottom: 10px; letter-spacing: .02em; }
 
 /* ========== 工具类 ========== */
-.section-gap { margin-top: 28px; }
+.section-gap { margin-top: 32px; }
 .text-sub { color: var(--text-sub); font-size: 13px; line-height: 1.8; }
+
+/* 重新演示：次要操作 → 纯文本链接样式；hover 转暖红提示其"清空"后果 */
+.btn[onclick*="resetDemo"] {
+  display: block;
+  width: auto;
+  margin: 0 auto;
+  padding: 4px 2px;
+  background: none;
+  border: none;
+  box-shadow: none;
+  font-size: 13px;
+  font-weight: 400;
+  letter-spacing: .02em;
+  color: #9a9a96;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+.btn[onclick*="resetDemo"]:hover {
+  background: none;
+  border: none;
+  transform: none;
+  color: var(--red);
+}
 
 /* 空状态：虚线空环标记 + 从容的排版 */
 .empty {
@@ -651,10 +674,15 @@ body {
   background: var(--fill);
 }
 
-/* 到期提醒：细左条 + 浅暖红渐变收尾 */
-.due-card {
+/* 到期提醒：精致通知框——白底圆角轻阴影 + 贯高提醒线 */
+.card.due-card {
+  background: var(--card);
+  border: 1px solid rgba(233, 231, 225, .7);
   border-left: 3px solid var(--red);
-  background: linear-gradient(90deg, var(--red-soft) 0%, var(--card) 72px);
+  border-radius: 12px;
+  box-shadow: var(--sh-1);
+  padding: 20px 24px 20px 21px;
+  margin-bottom: 24px;
 }
 
 h2.page-title {
