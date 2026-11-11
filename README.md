@@ -8,15 +8,17 @@
 
 ## 一、最快体验：双击就能看
 
-**双击 `web/index.html`**（用 Chrome / Edge 打开）。
+**离线演示：请双击 `web/index.html` 查看效果，无需安装 Python、无需联网。**
 
-不需要安装 Python，不需要联网，不需要启动任何服务。识物、四问、六维打分、观察箱全部可用，数据保存在本机浏览器里，刷新不丢。
+识物、四问、六维打分、观察箱全部可用，数据保存在本机浏览器里，刷新不丢。适合老师快速查看作品效果。
 
-适合老师快速查看作品效果。
+> 离线演示中，识物使用示例结果、打分使用本地规则；真 AI 识别需启动后端（见下）。
 
 ## 二、完整功能：真 AI + 后端
 
-需要 Python 3.11 或更高版本（[python.org](https://www.python.org/downloads/) 下载，安装时勾选 **Add python.exe to PATH**）。
+**完整功能（真 AI 识别与后端）需已安装 Python 3.11+，双击 `一键启动.bat` 体验。**
+
+Python 下载：[python.org](https://www.python.org/downloads/)，安装时勾选 **Add python.exe to PATH**。
 
 | 系统 | 操作 |
 |---|---|

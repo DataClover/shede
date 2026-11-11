@@ -70,7 +70,7 @@ if not exist "config.ini" (
   )
 )
 
-if not exist "web\index.html" (
+if not exist "..\web\index.html" (
   echo [警告] 未找到 web\index.html。
   echo        说明网页托管尚未提交（方案A方式1 未落地），
   echo        打开首页会看到 JSON 而非网页。请先完成网页托管再答辩。
