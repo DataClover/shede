@@ -21,7 +21,7 @@
 | Windows | 双击 `一键启动.bat` |
 | macOS / Linux | 项目目录执行 `bash 一键启动-mac.command` |
 
-首次运行会自动创建虚拟环境并安装依赖（约 1~3 分钟），看到 `Uvicorn running on http://0.0.0.0:8000` 即成功，窗口不要关。
+首次运行会自动检查并安装依赖（约 1~3 分钟，失败自动切清华镜像重试），看到 `Uvicorn running on http://0.0.0.0:8000` 即成功，窗口不要关。
 
 > 配置 AI：把 `backend/config.ini.example` 复制为 `backend/config.ini`，填写 `zhipu_api_key`。
 > 未配置时自动使用规则打分，流程不受影响。该文件已被 .gitignore 忽略，**切勿提交到任何仓库**。

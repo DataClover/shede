@@ -1,12 +1,12 @@
 # ---- 依赖与缓存 ----
-backend/.venv/
+.venv/
 __pycache__/
 *.pyc
 *.pyo
 
 # ---- 运行时数据（不入库）----
-backend/data/
-backend/Photos/
+data/
+Photos/
 *.log
 
 # ---- 本地配置（真 key 不入库）----
@@ -25,3 +25,5 @@ desktop.ini
 # ---- 工具产物（不入库）----
 .screenshots/
 .trae-html-share-packages/
+
+!十二组-舍得.zip
