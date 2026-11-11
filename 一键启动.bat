@@ -17,30 +17,39 @@ echo.
 
 where python >nul 2>nul
 if errorlevel 1 (
-  echo [错误] 未在 PATH 中找到 python。
-  echo        请安装 Python 3.11+：https://www.python.org/downloads/
-  echo        安装时务必勾选 "Add python.exe to PATH"。
-  pause
-  exit /b 1
+  where py >nul 2>nul
+  if errorlevel 1 (
+    echo [错误] 未在 PATH 中找到 python。
+    echo        请安装 Python 3.11+：https://www.python.org/downloads/
+    echo        安装时务必勾选 "Add python.exe to PATH"。
+    pause
+    exit /b 1
+  )
+  set "PY=py -3"
+) else (
+  set "PY=python"
 )
 
-python -c "import sys; sys.exit(0 if sys.version_info >= (3,11) else 1)" >nul 2>nul
+%PY% -c "import sys; sys.exit(0 if sys.version_info >= (3,11) else 1)" >nul 2>nul
 if errorlevel 1 (
-  echo [错误] Python 版本过低，需要 3.11 或更高。
+  echo [错误] Python 不可用或版本过低（需要 3.11 或更高）。
+  echo        若已安装仍报此错，可能是应用商店占位程序，
+  echo        请到 https://www.python.org/downloads/ 重新安装。
   pause
   exit /b 1
 )
 
 if not exist ".venv\Scripts\python.exe" (
   echo [1/6] 正在创建虚拟环境 .venv ...
-  python -m venv .venv
+  %PY% -m venv .venv
   if errorlevel 1 ( echo [错误] 虚拟环境创建失败。 & pause & exit /b 1 )
 
   echo [2/6] 正在安装依赖（首次约 1-3 分钟，需联网）...
-  ".venv\Scripts\python.exe" -m pip install --disable-pip-version-check -q -r requirements.txt
+  ".venv\Scripts\python.exe" -m pip install --disable-pip-version-check -q --upgrade pip >nul 2>nul
+  ".venv\Scripts\python.exe" -m pip install --disable-pip-version-check -q --prefer-binary -r requirements.txt
   if errorlevel 1 (
     echo        默认源失败，切换清华镜像重试 ...
-    ".venv\Scripts\python.exe" -m pip install --disable-pip-version-check -q -i https://pypi.tuna.tsinghua.edu.cn/simple -r requirements.txt
+    ".venv\Scripts\python.exe" -m pip install --disable-pip-version-check -q --prefer-binary -i https://pypi.tuna.tsinghua.edu.cn/simple -r requirements.txt
     if errorlevel 1 ( echo [错误] 依赖安装失败，请检查网络后重试。 & pause & exit /b 1 )
   )
 ) else (
