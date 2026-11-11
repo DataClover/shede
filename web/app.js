@@ -765,15 +765,6 @@ window.addEventListener('hashchange', route);
       const r = await fetch(BASE + '/health', { signal: ctrl.signal });
       clearTimeout(timer);
       OFFLINE = !r.ok;
-      if (r.ok) {
-        try {
-          const h = await r.json();
-          // 无 AI 密钥时首次加载弹一次 Toast（不反复弹，页脚常驻文案不动）
-          if (h && h.has_ai_key === false) {
-            setTimeout(() => toast('未连接云端 AI，当前为本地轻量推算'), 600);
-          }
-        } catch (e) { /* 健康响应非 JSON 时忽略 */ }
-      }
     } catch (e) {
       OFFLINE = true;
     }

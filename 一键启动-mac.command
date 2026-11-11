@@ -35,6 +35,11 @@ if ! python3 -c "import fastapi, uvicorn, zhipuai, PIL, pydantic, jwt, multipart
       pause; exit 1
     fi
   fi
+  # 安装后复查：防止 pip 误判「已安装」但实际不可导入
+  if ! python3 -c "import fastapi, uvicorn, zhipuai, PIL, pydantic, jwt, multipart, httpx, cachetools" 2>/dev/null; then
+    echo "依赖安装失败，请检查网络后重试"
+    pause; exit 1
+  fi
 fi
 
 # ---- 3. 配置文件（缺则从模板复制）----
@@ -44,7 +49,7 @@ fi
 
 # ---- 4. AI 密钥提示（无 key 也能跑，后端自动退回本地轻量推算）----
 if ! python3 -c "import configparser,sys; c=configparser.ConfigParser(); c.read('config.ini',encoding='utf-8'); k=c.get('zhipu','zhipu_api_key',fallback='').strip(); sys.exit(0 if k and 'YOUR' not in k.upper() else 1)" 2>/dev/null; then
-  echo "提示：未检测到 AI 密钥，本次将使用本地轻量推算，功能照常可用。"
+  echo "提示：未检测到 AI 密钥，已启用本地轻量推算。"
   echo
 fi
 

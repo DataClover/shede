@@ -47,6 +47,13 @@ if errorlevel 1 (
     pause
     exit /b 1
   )
+  rem 安装后复查：防止 pip 误判「已安装」但实际不可导入
+  %PY% -c "import fastapi, uvicorn, zhipuai, PIL, pydantic, jwt, multipart, httpx, cachetools" >nul 2>nul
+  if errorlevel 1 (
+    echo 依赖安装失败，请检查网络后重试
+    pause
+    exit /b 1
+  )
 )
 
 rem ---- 3. 配置文件（缺则从模板复制）----
@@ -57,7 +64,7 @@ if not exist "config.ini" (
 rem ---- 4. AI 密钥提示（无 key 也能跑，后端自动退回本地轻量推算）----
 %PY% -c "import configparser,sys; c=configparser.ConfigParser(); c.read('config.ini',encoding='utf-8'); k=c.get('zhipu','zhipu_api_key',fallback='').strip(); sys.exit(0 if k and 'YOUR' not in k.upper() else 1)" >nul 2>nul
 if errorlevel 1 (
-  echo 提示：未检测到 AI 密钥，本次将使用本地轻量推算，功能照常可用。
+  echo 提示：未检测到 AI 密钥，已启用本地轻量推算。
   echo.
 )
 

@@ -215,13 +215,10 @@ app.include_router(DisposeRouter)
 @app.get("/health")
 async def health_check():
     # 【系统】健康检查探针：供启动脚本/监控定时轮询，返回 200 即表示服务存活
-    # has_ai_key：前端据此提示「未连接云端 AI」，缺 key 时后端自动退回本地规则打分
-    _key = config.get('zhipu', 'zhipu_api_key', fallback='').strip()
     return {
         'status': 'ok',
         'version': app.version,
         'time': datetime.now().strftime('%Y-%m-%d %H:%M:%S'),
-        'has_ai_key': bool(_key) and 'YOUR' not in _key.upper(),
     }
 
 # 网页演示版（方案A）：静态产物挂到 /，必须在所有 API 路由（含 /health）之后挂载
