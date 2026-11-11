@@ -57,7 +57,7 @@ Page({
     }
 
     this.setData({ submitting: true });
-    wx.showLoading({ title: 'AI 分析中...' });
+    wx.showLoading({ title: '正在帮你算…' });
     try {
       const payload = Object.assign({
         openid: api.openid(),

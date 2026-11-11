@@ -67,7 +67,7 @@
     "list": [
       {
         "pagePath": "pages/home/home",
-        "text": "决策",
+        "text": "首页",
         "iconPath": "assets/icons/home.png",
         "selectedIconPath": "assets/icons/home-active.png"
       },

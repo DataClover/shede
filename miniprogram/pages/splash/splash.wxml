@@ -24,7 +24,7 @@
       
       <view class="app-info">
         <text class="app-name">舍得</text>
-        <text class="app-slogan">看清去留 · 留下真正需要</text>
+        <text class="app-slogan">不替你扔，只帮你想清楚</text>
       </view>
     </view>
 
@@ -63,7 +63,7 @@
 
   <!-- 底部信息 -->
   <view class="splash-footer">
-    <text class="footer-text">拍照识别 · 四问分析 · 30 天观察</text>
+    <text class="footer-text">AI 只帮你把账算清，最后拍板的永远是你</text>
     <text class="version-text">v1.0.0 | Lordli All rights reserved.</text>
   </view>
 </view>

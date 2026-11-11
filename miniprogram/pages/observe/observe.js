@@ -43,10 +43,10 @@ Page({
       });
       if (data.observe_used_count >= 3) {
         wx.showModal({
-          title: '可以直接留下',
-          content: data.hint,
+          title: '它确实有用',
+          content: (data.hint || '这件东西你最近用得挺勤') + '\n看来它是真有用，放心留下吧。',
           showCancel: false,
-          confirmText: '知道了'
+          confirmText: '好'
         });
       } else {
         wx.showToast({ title: data.hint || '记下了', icon: 'none', duration: 2200 });
@@ -63,7 +63,7 @@ Page({
         method: 'POST',
         data: { openid: api.openid(), item_id: e.currentTarget.dataset.id, decision: 'keep' }
       });
-      wx.showToast({ title: '已留下', icon: 'success' });
+      wx.showToast({ title: '好，它留下了', icon: 'success' });
       this.load();
     } catch (error) {
       api.toastError(error);

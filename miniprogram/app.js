@@ -330,7 +330,7 @@ App({
     // 显示错误提示
     wx.showModal({
       title: '初始化失败',
-      content: '系统初始化失败，请检查网络连接后重试',
+      content: '没能连上服务，别担心：请确认后端已启动，然后再试一次',
       showCancel: false,
       confirmText: '重试',
       success: () => {

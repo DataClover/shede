@@ -32,7 +32,7 @@
   
   <!-- 操作提示 -->
   <view class="tips-container">
-    <view class="tips-text">每次只拍一个物品，识别更准确</view>
+    <view class="tips-text">一次只拍一件，我更容易认出它</view>
   </view>
   
   <!-- 底部操作栏 -->
@@ -54,7 +54,7 @@
         <view class="photo-actions" wx:if="{{photoResult}}">
           <button class="cu-btn bg-grey sm" bindtap="retakePhoto">重拍</button>
           <button class="cu-btn bg-blue sm" disabled="{{processing}}" loading="{{processing}}">
-            {{processing ? '识别中...' : '确认'}}
+            {{processing ? '我在认…' : '确认'}}
           </button>
         </view>
       </view>
@@ -73,7 +73,7 @@
     <view class="processing-content">
       <view class="cu-load loading"></view>
       <view class="processing-text">
-        识别物品中...
+        我在认它了，稍等…
       </view>
     </view>
   </view>

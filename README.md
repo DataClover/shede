@@ -39,10 +39,10 @@
 
 ```
 ├─ miniprogram/             微信小程序源码
-│  ├─ pages/                决策工作台 / 观察箱 / 我的
+│  ├─ pages/                首页 / 观察箱 / 我的
 │  ├─ packageCamera/        拍照 + AI 识图确认
 │  ├─ packageStorage/       决策详情
-│  ├─ packageShede/         四问 / 六维建议 / 处理建议
+│  ├─ packageShede/         四问 / 六维分析 / 它的下一站
 │  └─ utils/                配置与请求封装
 ├─ backend/                 FastAPI 后端
 │  ├─ launch.py             入口

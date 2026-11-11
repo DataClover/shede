@@ -4,15 +4,15 @@
 
 <view class="page">
   <view class="hero">
-    <view class="hero-title">观察箱</view>
-    <view class="hero-sub">放进来 30 天，用实际使用回答“该不该留”</view>
+    <view class="hero-title">观察箱 · 给纠结一段冷静期</view>
+    <view class="hero-sub">放进来 30 天，用实际使用回答「该不该留」</view>
   </view>
 
   <view class="item-card">
     <view class="li-head">
       <view>
-        <view class="li-title">待决策 {{overview.pending || 0}}</view>
-        <view class="li-sub">观察中 {{overview.observing || 0}} · 已处理 {{overview.resolved || 0}} · 共 {{overview.total || 0}}</view>
+        <view class="li-title">还没想好 {{overview.pending || 0}}</view>
+        <view class="li-sub">冷静期中 {{overview.observing || 0}} · 想清楚了 {{overview.resolved || 0}} · 共 {{overview.total || 0}}</view>
       </view>
       <view class="badge {{overview.due_count > 0 ? 'badge-warn' : 'badge-ok'}}">
         {{overview.due_count > 0 ? '到期 ' + overview.due_count : '没有到期'}}
@@ -23,11 +23,11 @@
 
   <view class="loading" wx:if="{{loading}}">加载中...</view>
   <view class="item-card" wx:if="{{!loading && items.length === 0}}">
-    <view class="q-title">观察箱是空的</view>
+    <view class="q-title">观察箱空着</view>
     <view class="foot-note" style="text-align:left;margin:12rpx 0 24rpx;">
-      在「决策」中完成四问后，选择「放进 30 天观察箱」，物品就会出现在这里。
+      说明你没有什么放不下的，挺好。想再想想时，在四问结果里选「再想想」就会出现在这里。
     </view>
-    <button class="btn-primary" bindtap="onHome">去做决策</button>
+    <button class="btn-primary" bindtap="onHome">去挑一件东西</button>
   </view>
 
   <view class="list-item" wx:for="{{items}}" wx:key="item_id">
@@ -37,12 +37,12 @@
         {{item.expired ? '已到期' : '还剩 ' + item.days_left + ' 天'}}
       </view>
     </view>
-    <view class="li-sub">到期日 {{item.observe_until}} · 观察期内用到 {{item.observe_used_count}} 次</view>
+    <view class="li-sub">冷静到 {{item.observe_until}} · 这期间用了 {{item.observe_used_count}} 次</view>
     <view class="li-actions">
-      <view class="li-btn li-btn-main" data-id="{{item.item_id}}" bindtap="onUsed">我用到了</view>
+      <view class="li-btn li-btn-main" data-id="{{item.item_id}}" bindtap="onUsed">这次用上了</view>
       <view class="li-btn" data-id="{{item.item_id}}" bindtap="onKeep">留下</view>
-      <view class="li-btn" data-id="{{item.item_id}}" bindtap="onDispose">处理</view>
-      <view class="li-btn" data-id="{{item.item_id}}" bindtap="onVerdict">看结论</view>
+      <view class="li-btn" data-id="{{item.item_id}}" bindtap="onDispose">送它走</view>
+      <view class="li-btn" data-id="{{item.item_id}}" bindtap="onVerdict">看分析</view>
     </view>
   </view>
 </view>

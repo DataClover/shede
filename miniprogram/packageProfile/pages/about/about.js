@@ -44,8 +44,8 @@ Page({
       },
       {
         icon: 'cuIcon-delete',
-        title: '处理建议',
-        description: '提供出售、转赠、回收和丢弃的具体下一步'
+        title: '它的下一站',
+        description: '给出卖掉、送人、回收、扔掉的具体下一步'
       }
     ],
     
@@ -57,7 +57,7 @@ Page({
         changes: [
           '上线拍照、四问、六维分析的决策链路',
           '支持 30 天观察箱和四种处理渠道',
-          '支持演示登录与无 AI key 的规则降级'
+          '支持演示登录与无 AI 密钥时的本地规则兜底'
         ]
       }
     ],
@@ -68,7 +68,7 @@ Page({
       { name: 'ColorUI', description: 'UI 组件库' },
       { name: 'FastAPI', description: '后端服务' },
       { name: 'SQLite', description: '数据存储' },
-      { name: 'AI 识别', description: '图像识别与决策分析，支持规则降级' }
+      { name: 'AI 识别', description: '图像识别与决策分析，未配置密钥时由本地规则兜底' }
     ],
     
     // 许可证信息

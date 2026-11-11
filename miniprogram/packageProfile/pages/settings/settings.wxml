@@ -1,7 +1,7 @@
 <view class="settings-page">
   <cu-custom bgColor="bg-gradual-blue" isBack="{{true}}">
     <view slot="backText">返回</view>
-    <view slot="content">演示模式说明</view>
+    <view slot="content">演示与 AI 说明</view>
   </cu-custom>
 
   <view class="main-container">
@@ -24,18 +24,18 @@
     </view>
 
     <view class="settings-section">
-      <view class="section-title"><text class="cuIcon-scan text-green"></text><text>AI 降级</text></view>
+      <view class="section-title"><text class="cuIcon-scan text-green"></text><text>AI 连接</text></view>
       <view class="settings-card">
         <view class="setting-item">
           <view class="item-info">
             <text class="item-title">识别与六维分析</text>
-            <text class="item-desc">未配置 AI key 时，后端自动使用演示识别和规则评分，不会卡在 AI 请求。</text>
+            <text class="item-desc">未配置 AI 密钥时，识别与评分由本地规则兜底，流程照常走通。</text>
           </view>
         </view>
         <view class="setting-item">
           <view class="item-info">
-            <text class="item-title">处理建议</text>
-            <text class="item-desc">出售、转赠、回收和丢弃文案均可由规则生成。</text>
+            <text class="item-title">它的下一站</text>
+            <text class="item-desc">卖掉、送人、回收、扔掉都有对应文案，未连 AI 时由规则生成。</text>
           </view>
         </view>
       </view>
@@ -47,7 +47,7 @@
         <view class="setting-item">
           <view class="item-info">
             <text class="item-title">最终决定权在你</text>
-            <text class="item-desc">AI 只提供评分、理由和下一步建议，你可以留下、观察或处理物品。</text>
+            <text class="item-desc">AI 只提供评分、理由和下一步，留下还是送走，你说了算。</text>
           </view>
         </view>
       </view>

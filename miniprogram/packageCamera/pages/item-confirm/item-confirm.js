@@ -107,10 +107,10 @@ Page({
             resolve(res.data);
           } else {
             const detail = res.data && (res.data.message || res.data.detail);
-            reject(new Error(typeof detail === 'string' ? detail : '保存物品失败'));
+            reject(new Error(typeof detail === 'string' ? detail : '没能保存，请再试一次'));
           }
         },
-        fail: () => reject(new Error('网络请求失败，请确认后端已启动'))
+        fail: () => reject(new Error('没连上服务，请确认后端已启动'))
       });
     });
   },
@@ -119,11 +119,11 @@ Page({
     const { itemInfo, recognitionResult, submitting } = this.data;
     if (submitting) return;
     if (!itemInfo.name.trim()) {
-      wx.showToast({ title: '请输入物品名称', icon: 'none' });
+      wx.showToast({ title: '先给它起个名字吧', icon: 'none' });
       return;
     }
     if (!itemInfo.category) {
-      wx.showToast({ title: '请选择物品分类', icon: 'none' });
+      wx.showToast({ title: '选一个最接近的分类', icon: 'none' });
       return;
     }
 
@@ -149,7 +149,7 @@ Page({
       });
     } catch (error) {
       wx.hideLoading();
-      wx.showToast({ title: error.message || '保存失败，请重试', icon: 'none' });
+      wx.showToast({ title: error.message || '没能保存，请再试一次', icon: 'none' });
       this.setData({ submitting: false });
     }
   }

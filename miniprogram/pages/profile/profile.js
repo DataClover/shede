@@ -9,7 +9,7 @@ Page({
       {
         id: 'demo',
         title: '演示模式',
-        subtitle: '演示登录与 AI 降级说明',
+        subtitle: '演示登录与 AI 连接说明',
         icon: 'cuIcon-info',
         color: '#4facfe'
       }
@@ -144,7 +144,7 @@ Page({
 
   onShareAppMessage() {
     return {
-      title: '舍得：用四个问题，决定一件物品的去留',
+      title: '舍得：不替你扔，只帮你想清楚',
       path: '/pages/splash/splash',
       imageUrl: '/assets/images/share-cover.jpg'
     };
@@ -152,7 +152,7 @@ Page({
 
   onShareTimeline() {
     return {
-      title: '舍得 · AI 断舍离决策助手',
+      title: '舍得 · 不替你扔，只帮你想清楚',
       path: '/pages/splash/splash',
       imageUrl: '/assets/images/share-cover.jpg'
     };

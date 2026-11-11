@@ -33,7 +33,7 @@ Page({
       this.setData({
         overview,
         pendingItems: (pending.items || []).map(item => Object.assign({}, item, {
-          actionText: item.ai_verdict ? '做决定' : '答四问'
+          actionText: item.ai_verdict ? '看分析' : '一起想'
         })),
         dueItems: due.items || [],
         loading: false
@@ -67,7 +67,7 @@ Page({
 
   onShareAppMessage() {
     return {
-      title: '舍得：用四个问题，决定一件物品的去留',
+      title: '舍得：不替你扔，只帮你想清楚',
       path: '/pages/splash/splash',
       imageUrl: '/assets/images/share-cover.jpg'
     };
@@ -75,7 +75,7 @@ Page({
 
   onShareTimeline() {
     return {
-      title: '舍得 · AI 断舍离决策助手',
+      title: '舍得 · 不替你扔，只帮你想清楚',
       path: '/pages/splash/splash',
       imageUrl: '/assets/images/share-cover.jpg'
     };

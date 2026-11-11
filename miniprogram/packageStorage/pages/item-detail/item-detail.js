@@ -11,11 +11,11 @@ const LABELS = {
 };
 const DECISIONS = {
   keep: '留下',
-  observe: '观察 30 天',
-  sell: '出售',
-  gift: '转赠',
+  observe: '再想想（冷静 30 天）',
+  sell: '卖掉',
+  gift: '送人',
   recycle: '回收',
-  discard: '丢弃'
+  discard: '扔掉'
 };
 
 Page({
@@ -24,7 +24,7 @@ Page({
     item: {},
     dims: [],
     imageUrl: '',
-    statusText: '待决策',
+    statusText: '还没想好',
     decisionText: '',
     loading: true
   },
@@ -56,7 +56,7 @@ Page({
         item,
         dims,
         imageUrl,
-        statusText: data.status_text || '待决策',
+        statusText: data.status_text || '还没想好',
         decisionText: DECISIONS[item.decision] || '',
         loading: false
       });

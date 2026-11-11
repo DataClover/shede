@@ -4,52 +4,52 @@
 
 <view class="page decision-home">
   <view class="hero decision-hero">
-    <view class="hero-title">这件物品，该留还是该舍？</view>
+    <view class="hero-title">这件东西，该留还是该舍？</view>
     <view class="hero-sub">拍照识别，回答四问，看清理由后由你决定</view>
     <button class="btn-primary camera-button" bindtap="onCamera">
-      <text class="cuIcon-camera"></text> 拍照开始决策
+      <text class="cuIcon-camera"></text> 拍一件让你纠结的东西
     </button>
   </view>
 
   <view class="item-card">
     <view class="state-grid">
-      <view class="state-cell"><text class="state-number">{{overview.pending || 0}}</text><text class="state-label">待决策</text></view>
-      <view class="state-cell" bindtap="onObserve"><text class="state-number">{{overview.observing || 0}}</text><text class="state-label">观察中</text></view>
-      <view class="state-cell"><text class="state-number">{{overview.resolved || 0}}</text><text class="state-label">已处理</text></view>
+      <view class="state-cell"><text class="state-number">{{overview.pending || 0}}</text><text class="state-label">还没想好</text></view>
+      <view class="state-cell" bindtap="onObserve"><text class="state-number">{{overview.observing || 0}}</text><text class="state-label">冷静期中</text></view>
+      <view class="state-cell"><text class="state-number">{{overview.resolved || 0}}</text><text class="state-label">想清楚了</text></view>
     </view>
   </view>
 
   <view class="item-card due-card" wx:if="{{overview.due_count > 0}}" bindtap="onObserve">
     <view class="li-head">
       <view>
-        <view class="li-title">{{overview.due_count}} 件物品观察到期</view>
+        <view class="li-title">有 {{overview.due_count}} 件东西的冷静期到了</view>
         <view class="li-sub" wx:if="{{dueItems.length > 0}}">最早到期：{{dueItems[0].title}}</view>
       </view>
-      <view class="badge badge-warn">去处理</view>
+      <view class="badge badge-warn">去看看</view>
     </view>
   </view>
 
   <view class="section-heading">
-    <view class="section-title">待决策</view>
+    <view class="section-title">还没想好</view>
     <view class="section-count">{{pendingItems.length}} 件</view>
   </view>
 
   <view class="loading" wx:if="{{loading}}">加载中...</view>
   <view class="item-card empty-card" wx:if="{{!loading && pendingItems.length === 0}}">
-    <view class="q-title">没有待决策物品</view>
-    <view class="foot-note empty-copy">拍一张照片，从一件拿不定主意的物品开始。</view>
-    <button class="btn-ghost" bindtap="onCamera">拍照开始决策</button>
+    <view class="q-title">眼下没有让你纠结的东西</view>
+    <view class="foot-note empty-copy">挺清爽的。拍一件试试？</view>
+    <button class="btn-ghost" bindtap="onCamera">拍一件试试</button>
   </view>
 
   <view class="list-item" wx:for="{{pendingItems}}" wx:key="item_id" data-id="{{item.item_id}}" data-verdict="{{item.ai_verdict}}" bindtap="onItemTap">
     <view class="li-head">
       <view class="pending-main">
         <view class="li-title">{{item.title}}</view>
-        <view class="li-sub">{{item.category || '未分类'}}<text wx:if="{{item.ai_verdict}}"> · 结论 {{item.ai_score}}/100 留</text></view>
+        <view class="li-sub">{{item.category || '未分类'}}<text wx:if="{{item.ai_verdict}}"> · 我给了 {{item.ai_score}} 分</text></view>
       </view>
       <view class="li-btn li-btn-main">{{item.actionText}}</view>
     </view>
   </view>
 
-  <view class="decision-note">AI 只给建议，最终决定权在你。</view>
+  <view class="decision-note">AI 只帮你把账算清，最后拍板的永远是你。</view>
 </view>

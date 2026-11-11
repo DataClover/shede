@@ -1,10 +1,10 @@
 const api = require('../../../utils/api.js');
 
 const CHANNELS = [
-  { key: 'sell', label: '出售' },
-  { key: 'gift', label: '转赠' },
+  { key: 'sell', label: '卖掉' },
+  { key: 'gift', label: '送人' },
   { key: 'recycle', label: '回收' },
-  { key: 'discard', label: '丢弃' }
+  { key: 'discard', label: '扔掉' }
 ];
 
 Page({
@@ -61,7 +61,7 @@ Page({
     if (!suggest) return;
     wx.setClipboardData({
       data: [suggest.title_text, suggest.body_text].filter(Boolean).join('\n'),
-      success: () => wx.showToast({ title: '文案已复制', icon: 'success' })
+      success: () => wx.showToast({ title: '文案复制好了', icon: 'success' })
     });
   },
 
@@ -77,7 +77,7 @@ Page({
           decision: this.data.channel
         }
       });
-      wx.showToast({ title: '已记为已处理', icon: 'success' });
+      wx.showToast({ title: '好，这件事到此为止了', icon: 'success' });
       setTimeout(() => wx.switchTab({ url: '/pages/observe/observe' }), 500);
     } catch (error) {
       api.toastError(error);

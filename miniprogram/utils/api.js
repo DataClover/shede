@@ -31,10 +31,10 @@ async function request(path, options) {
           return;
         }
         const detail = body && (body.detail || body.message);
-        reject(new Error(typeof detail === 'string' ? detail : `请求失败 ${res.statusCode}`));
+        reject(new Error(typeof detail === 'string' ? detail : '这次没成功，请再试一次'));
       },
       fail(error) {
-        reject(new Error('网络错误：' + (error.errMsg || '请确认后端已启动')));
+        reject(new Error('没连上服务，请确认后端已启动'));
       }
     });
   });
@@ -42,7 +42,7 @@ async function request(path, options) {
 
 function toastError(error) {
   wx.showToast({
-    title: (error && error.message) || '出错了',
+    title: (error && error.message) || '这次没成功，请再试一次',
     icon: 'none',
     duration: 2500
   });

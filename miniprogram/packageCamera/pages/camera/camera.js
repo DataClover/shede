@@ -104,7 +104,7 @@ Page({
       fail: (error) => {
         console.error('拍照失败:', error);
         wx.showToast({
-          title: '拍照失败',
+          title: '没拍上，再试一次',
           icon: 'error'
         });
         this.setData({ processing: false });
@@ -156,7 +156,7 @@ Page({
       console.error('处理失败:', error);
       wx.hideLoading();
       wx.showToast({
-        title: error.message || '处理失败，请重试',
+        title: error.message || '这次没成功，再试一次',
         icon: 'error'
       });
       this.setData({ processing: false });

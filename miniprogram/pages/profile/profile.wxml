@@ -2,7 +2,7 @@
 <view class="page-container">
   <!-- 自定义导航栏 -->
   <cu-custom bgColor="bg-white" isBack="{{false}}" isTop="{{true}}">
-    <view slot="content" class="nav-title">个人中心</view>
+    <view slot="content" class="nav-title">我的</view>
   </cu-custom>
 
   <!-- 主要内容区域 -->
@@ -60,7 +60,7 @@
             </view>
             
             <view class="user-subtitle text-gray">
-              <text>欢迎使用：舍得</text>
+              <text>不替你扔，只帮你想清楚</text>
             </view>
           </view>
           

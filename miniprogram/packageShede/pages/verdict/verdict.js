@@ -50,8 +50,8 @@ Page({
         });
       } else {
         wx.showModal({
-          title: '还没分析过',
-          content: '这件东西还没有结论，先回答四个问题吧',
+          title: '还没聊过它',
+          content: '这件东西还没有结论，先回答四个小问题吧',
           confirmText: '去答题',
           showCancel: false,
           success: () => wx.redirectTo({ url: `/packageShede/pages/question/question?item_id=${itemId}` })
@@ -76,7 +76,7 @@ Page({
     });
     const verdict = result.verdict || (result.score >= 65 ? 'keep' : (result.score >= 40 ? 'observe' : 'dispose'));
     this.setData({ result, dims, chipClass: 'chip-' + verdict });
-    wx.setNavigationBarTitle({ title: result.title || '决策结论' });
+    wx.setNavigationBarTitle({ title: result.title || '我是这么想的' });
   },
 
   onToggleChoice(e) {
@@ -94,10 +94,10 @@ Page({
         data: { openid: api.openid(), item_id: this.data.itemId, decision }
       });
       if (decision === 'keep') {
-        wx.showToast({ title: '已留下', icon: 'success' });
+        wx.showToast({ title: '好，它留下了', icon: 'success' });
         setTimeout(() => wx.switchTab({ url: '/pages/home/home' }), 500);
       } else if (decision === 'observe') {
-        wx.showToast({ title: '已观察 30 天', icon: 'success' });
+        wx.showToast({ title: '先放进观察箱，30 天后再看', icon: 'none' });
         setTimeout(() => wx.switchTab({ url: '/pages/observe/observe' }), 500);
       } else {
         wx.redirectTo({

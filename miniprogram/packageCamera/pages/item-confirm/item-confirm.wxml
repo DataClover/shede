@@ -1,6 +1,6 @@
 <cu-custom bgColor="bg-white" isBack="{{true}}">
   <view slot="backText">返回</view>
-  <view slot="content">确认物品信息</view>
+  <view slot="content">是它吗？</view>
 </cu-custom>
 
 <view class="page-container">
@@ -18,23 +18,23 @@
   <view class="edit-section">
     <view class="section-header">
       <text class="cuIcon-edit text-green"></text>
-      <text class="section-title">物品信息</text>
+      <text class="section-title">它是什么</text>
     </view>
     <view class="form-card">
       <view class="form-group">
         <view class="form-item">
-          <view class="form-label">名称 <text class="required">*</text></view>
-          <input class="form-input" placeholder="请输入物品名称" value="{{itemInfo.name}}" data-field="name" bindinput="onInputChange" maxlength="30" />
+          <view class="form-label">叫它什么 <text class="required">*</text></view>
+          <input class="form-input" placeholder="给它起个名字" value="{{itemInfo.name}}" data-field="name" bindinput="onInputChange" maxlength="30" />
         </view>
         <view class="form-item">
-          <view class="form-label">描述</view>
-          <textarea class="form-textarea" placeholder="请输入物品描述（可选）" value="{{itemInfo.description}}" data-field="description" bindinput="onInputChange" maxlength="100" show-confirm-bar="{{false}}"></textarea>
+          <view class="form-label">补充两句（不写也行）</view>
+          <textarea class="form-textarea" placeholder="想起来的都可以写：来历、用途、和谁有关" value="{{itemInfo.description}}" data-field="description" bindinput="onInputChange" maxlength="100" show-confirm-bar="{{false}}"></textarea>
         </view>
         <view class="form-item">
-          <view class="form-label">分类 <text class="required">*</text></view>
+          <view class="form-label">算哪一类 <text class="required">*</text></view>
           <picker class="form-picker" mode="selector" range="{{categories}}" value="{{categoryIndex}}" bindchange="onCategoryChange">
             <view class="picker-text {{itemInfo.category ? '' : 'placeholder'}}">
-              {{itemInfo.category || '请选择分类'}} <text class="cuIcon-right"></text>
+              {{itemInfo.category || '选一个最接近的'}} <text class="cuIcon-right"></text>
             </view>
           </picker>
         </view>
@@ -59,7 +59,7 @@
 
   <view class="action-buttons">
     <button class="cu-btn bg-gradual-green lg" bindtap="onSubmit" disabled="{{submitting || !itemInfo.name || !itemInfo.category}}" loading="{{submitting}}">
-      {{submitting ? '保存中...' : '确认，开始决策'}}
+      {{submitting ? '记下了…' : '是它，开始聊聊'}}
     </button>
   </view>
 </view>

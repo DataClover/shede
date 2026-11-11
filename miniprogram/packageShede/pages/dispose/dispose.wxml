@@ -1,8 +1,8 @@
 <!-- packageShede/pages/dispose/dispose.wxml -->
 <view class="page">
   <view class="hero">
-    <view class="hero-title">怎么处理最好</view>
-    <view class="hero-sub">给你一条能立刻做的下一步，而不是一句"建议处理"</view>
+    <view class="hero-title">它的下一站</view>
+    <view class="hero-sub">给你一条能立刻做的下一步，而不是一句「建议处理」</view>
   </view>
 
   <view class="item-card">
@@ -17,7 +17,7 @@
     </view>
   </view>
 
-  <view class="loading" wx:if="{{loading}}">生成建议中...</view>
+  <view class="loading" wx:if="{{loading}}">正在帮你想办法…</view>
 
   <block wx:if="{{!loading && suggest}}">
     <view class="item-card">
@@ -38,7 +38,7 @@
       </view>
     </view>
 
-    <button class="btn-primary" bindtap="onCopy">复制文案</button>
-    <button class="btn-ghost" bindtap="onDone" loading="{{marking}}">已处理完，标记一下</button>
+    <button class="btn-primary" bindtap="onCopy">复制这段文案</button>
+    <button class="btn-ghost" bindtap="onDone" loading="{{marking}}">已送走，标记完成</button>
   </block>
 </view>

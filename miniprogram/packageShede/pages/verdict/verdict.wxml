@@ -1,7 +1,7 @@
 <view class="page" wx:if="{{result}}">
   <view class="hero">
     <view class="verdict-chip {{chipClass}}">
-      {{result.verdict === 'keep' ? '建议留着' : (result.verdict === 'observe' ? '建议先观察' : '建议处理掉')}}
+      {{result.verdict === 'keep' ? '可以放心留下' : (result.verdict === 'observe' ? '先别急着决定' : '也许能说再见了')}}
     </view>
     <view class="item-card">
       <view class="li-head">
@@ -14,29 +14,29 @@
   </view>
 
   <view class="item-card">
-    <view class="q-title">六个维度怎么算的</view>
+    <view class="q-title">我是从这六个方面看的</view>
     <view class="dim-row" wx:for="{{dims}}" wx:key="key">
       <view class="dim-head"><text>{{item.name}}</text><text>{{item.value}}</text></view>
       <view class="dim-bar"><view class="dim-fill {{item.cls}}" style="width:{{item.value}}%"></view></view>
     </view>
     <view class="foot-note" style="text-align:left;margin-top:16rpx;">
-      分数越高越该留；占用空间分越高=越省空间；是否重复当前用“有替代”答案近似。
+      分数越高，越偏向留下；「占用空间」分高说明它不占地儿。这些只是我的参考，最后怎么定，听你的。
     </view>
   </view>
 
   <view class="item-card">
-    <view class="q-title">最终决定由你做</view>
-    <button class="btn-primary" data-decision="keep" bindtap="onChoose" loading="{{chooseLoading === 'keep'}}" disabled="{{chooseLoading}}">留下，继续用</button>
-    <button class="btn-ghost" data-decision="observe" bindtap="onChoose" loading="{{chooseLoading === 'observe'}}" disabled="{{chooseLoading}}">放进 30 天观察箱</button>
-    <button class="btn-ghost" data-choice="transfer" bindtap="onToggleChoice" disabled="{{chooseLoading}}">出售或转赠</button>
+    <view class="q-title">想好了吗？轮到你了</view>
+    <button class="btn-primary" data-decision="keep" bindtap="onChoose" loading="{{chooseLoading === 'keep'}}" disabled="{{chooseLoading}}">留下它</button>
+    <button class="btn-ghost" data-decision="observe" bindtap="onChoose" loading="{{chooseLoading === 'observe'}}" disabled="{{chooseLoading}}">再想想（冷静 30 天）</button>
+    <button class="btn-ghost" data-choice="transfer" bindtap="onToggleChoice" disabled="{{chooseLoading}}">卖掉或送人</button>
     <view class="li-actions" wx:if="{{expandedChoice === 'transfer'}}">
-      <view class="li-btn li-btn-main" data-decision="sell" bindtap="onChoose">出售</view>
-      <view class="li-btn li-btn-main" data-decision="gift" bindtap="onChoose">转赠</view>
+      <view class="li-btn li-btn-main" data-decision="sell" bindtap="onChoose">卖掉</view>
+      <view class="li-btn li-btn-main" data-decision="gift" bindtap="onChoose">送人</view>
     </view>
-    <button class="btn-ghost" data-choice="dispose" bindtap="onToggleChoice" disabled="{{chooseLoading}}">处理</button>
+    <button class="btn-ghost" data-choice="dispose" bindtap="onToggleChoice" disabled="{{chooseLoading}}">送它走</button>
     <view class="li-actions" wx:if="{{expandedChoice === 'dispose'}}">
       <view class="li-btn" data-decision="recycle" bindtap="onChoose">回收</view>
-      <view class="li-btn" data-decision="discard" bindtap="onChoose">丢弃</view>
+      <view class="li-btn" data-decision="discard" bindtap="onChoose">扔掉</view>
     </view>
     <button class="btn-text" bindtap="onRetry" disabled="{{chooseLoading}}">重新答题</button>
   </view>
