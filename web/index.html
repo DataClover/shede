@@ -3,12 +3,12 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>舍得 · AI 断舍离决策助手（网页演示版）</title>
+  <title>舍得 · AI 断舍离决策助手</title>
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
   <header class="topbar">
-    <div class="brand" onclick="go('#/')">舍得 <span class="brand-sub">AI 断舍离决策助手 · 网页演示版</span></div>
+    <div class="brand" onclick="go('#/')">舍得 <span class="brand-sub">AI 断舍离决策助手</span></div>
     <nav class="nav">
       <a href="#/" data-nav="home">看板</a>
       <a href="#/observe" data-nav="observe">观察箱 <span id="navDueBadge" class="badge" hidden>0</span></a>
@@ -19,9 +19,13 @@
     <div class="loading">加载中…</div>
   </main>
 
-  <footer class="footer">AI 只提供建议，最终决定权在你 · 演示模式</footer>
+  <footer class="footer">
+    <div>AI 只提供建议，最终决定权在你</div>
+    <div id="modeHint" class="footer-hint"></div>
+  </footer>
 
   <div id="toast" class="toast" hidden></div>
+  <script src="offline.js"></script>
   <script src="app.js"></script>
 </body>
 </html>

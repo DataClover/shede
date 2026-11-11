@@ -7,6 +7,9 @@
 const OPENID = 'demouser00000000000000000000';
 const BASE = location.origin; // 方式1：静态页与接口同源
 
+// file:// 双击打开时没有后端，直接进演示模式；http 下探测失败也会自动切换
+let OFFLINE = location.protocol === 'file:';
+
 // ---------- 基础工具 ----------
 
 function toast(msg, ms = 2200) {
@@ -18,6 +21,8 @@ function toast(msg, ms = 2200) {
 }
 
 async function api(path, { method = 'GET', data, formData } = {}) {
+  if (OFFLINE) return window.SHEDE_OFFLINE.handle(path, { method, data, formData });
+
   const opts = { method };
   if (formData) {
     opts.body = formData;
@@ -30,7 +35,18 @@ async function api(path, { method = 'GET', data, formData } = {}) {
     const qs = new URLSearchParams(data).toString();
     url += (path.includes('?') ? '&' : '?') + qs;
   }
-  const resp = await fetch(url, opts);
+
+  let resp;
+  try {
+    resp = await fetch(url, opts);
+  } catch (e) {
+    // 网络层失败（后端没起 / 跨域被拦）→ 转演示模式，流程不中断
+    OFFLINE = true;
+    window.SHEDE_OFFLINE.markOffline();
+    setModeHint();
+    return window.SHEDE_OFFLINE.handle(path, { method, data, formData });
+  }
+
   let body;
   try { body = await resp.json(); } catch (e) { throw new Error('服务响应异常（HTTP ' + resp.status + '）'); }
   if (!resp.ok) throw new Error(body.detail || body.message || ('HTTP ' + resp.status));
@@ -38,8 +54,16 @@ async function api(path, { method = 'GET', data, formData } = {}) {
   return body.data !== undefined ? body.data : body;
 }
 
+function setModeHint() {
+  const el = document.getElementById('modeHint');
+  if (!el) return;
+  el.textContent = OFFLINE ? '演示模式 · 无需联网，数据只存在本机' : 'AI 已连接';
+  el.className = 'footer-hint' + (OFFLINE ? ' is-demo' : ' is-live');
+}
+
 function imgUrl(imageFilename) {
   if (!imageFilename) return '';
+  if (OFFLINE) return window.SHEDE_OFFLINE.imgUrl(imageFilename);
   return BASE + '/Photos/' + imageFilename;
 }
 
@@ -65,16 +89,30 @@ function setNav(name) {
   });
 }
 
-// 跨视图状态（刷新不丢）
+// 跨视图状态（刷新不丢；storage 不可用时退回内存）
 const store = {
-  set(k, v) { sessionStorage.setItem('shede_' + k, JSON.stringify(v)); },
-  get(k) { const s = sessionStorage.getItem('shede_' + k); return s ? JSON.parse(s) : null; },
-  del(k) { sessionStorage.removeItem('shede_' + k); }
+  _mem: {},
+  set(k, v) {
+    store._mem[k] = v;
+    try { sessionStorage.setItem('shede_' + k, JSON.stringify(v)); } catch (e) { /* file:// 或隐私模式 */ }
+  },
+  get(k) {
+    try {
+      const s = sessionStorage.getItem('shede_' + k);
+      if (s) return JSON.parse(s);
+    } catch (e) { /* ignore */ }
+    return store._mem[k] !== undefined ? store._mem[k] : null;
+  },
+  del(k) {
+    delete store._mem[k];
+    try { sessionStorage.removeItem('shede_' + k); } catch (e) { /* ignore */ }
+  }
 };
 
 function itemThumb(item) {
-  return item.image_filename
-    ? '<img class="item-thumb" src="' + esc(imgUrl(item.image_filename)) + '" alt="">'
+  const u = item.image_filename ? imgUrl(item.image_filename) : '';
+  return u
+    ? '<img class="item-thumb" src="' + esc(u) + '" alt="">'
     : '<div class="item-thumb-placeholder">物</div>';
 }
 
@@ -154,14 +192,31 @@ function viewCapture() {
     '  <div class="upload-zone" id="uploadZone">' +
     '    <div style="font-size:32px;margin-bottom:8px;">📷</div>' +
     '    <div>点击选择一张物品照片</div>' +
-    '    <div class="text-sub" style="margin-top:6px;">上传后 AI 自动识别（无 key 时用演示识别）</div>' +
+    '    <div class="text-sub" style="margin-top:6px;">上传后自动识别物品名称与分类</div>' +
     '  </div>' +
     '  <input type="file" id="fileInput" accept="image/*" hidden>' +
+    (OFFLINE
+      ? '  <div style="margin-top:12px;"><button class="btn btn-outline btn-block" id="btnSample">手边没照片？用示例物品体验完整流程</button></div>'
+      : '') +
     '</div>';
 
   const zone = document.getElementById('uploadZone');
   const input = document.getElementById('fileInput');
   zone.onclick = () => input.click();
+
+  const sampleBtn = document.getElementById('btnSample');
+  if (sampleBtn) {
+    sampleBtn.onclick = async () => {
+      const data = await window.SHEDE_OFFLINE.sampleCapture();
+      store.set('capture', {
+        image_filename: data.image_filename,
+        local_preview: '',
+        recognition: data.analysis_result || {}
+      });
+      go('#/confirm');
+    };
+  }
+
   input.onchange = async () => {
     const file = input.files[0];
     if (!file) return;
@@ -171,7 +226,7 @@ function viewCapture() {
       fd.append('openid', OPENID);
       fd.append('image', file);
       const data = await api('/v3/image/upload', { method: 'POST', formData: fd });
-      const localUrl = URL.createObjectURL(file);
+      const localUrl = OFFLINE ? '' : URL.createObjectURL(file);
       store.set('capture', {
         image_filename: data.image_filename,
         local_preview: localUrl,
@@ -320,7 +375,8 @@ async function viewVerdict(params) {
   const verdict = result.verdict || 'observe';
 
   let html = '<h2 class="page-title">AI 建议 · ' + esc(itemTitle) + '</h2>';
-  if (imageFilename) html += '<div class="card"><img class="detail-img" src="' + esc(imgUrl(imageFilename)) + '"></div>';
+  const detailImg = imageFilename ? imgUrl(imageFilename) : '';
+  if (detailImg) html += '<div class="card"><img class="detail-img" src="' + esc(detailImg) + '"></div>';
 
   html += '<div class="card" style="text-align:center;">' +
     '<span class="chip chip-' + esc(verdict) + '">' + (VERDICT_TEXT[verdict] || verdict) + '</span>' +
@@ -561,7 +617,8 @@ async function viewItem(params) {
   const status = item.status || 'pending';
 
   let html = '<h2 class="page-title">决策详情</h2>';
-  if (item.image_filename) html += '<div class="card"><img class="detail-img" src="' + esc(imgUrl(item.image_filename)) + '"></div>';
+  const itemImg = item.image_filename ? imgUrl(item.image_filename) : '';
+  if (itemImg) html += '<div class="card"><img class="detail-img" src="' + esc(itemImg) + '"></div>';
 
   html += '<div class="card">' +
     '<div class="item-title" style="font-size:18px;">' + esc(item.title) + '</div>' +
@@ -635,14 +692,28 @@ async function route() {
 window.addEventListener('hashchange', route);
 
 (async function boot() {
+  // 探测后端：file:// 双击直接走演示；http 下先看 /health，不通也走演示
+  if (location.protocol !== 'file:') {
+    try {
+      const ctrl = new AbortController();
+      const timer = setTimeout(() => ctrl.abort(), 1200);
+      const r = await fetch(BASE + '/health', { signal: ctrl.signal });
+      clearTimeout(timer);
+      OFFLINE = !r.ok;
+    } catch (e) {
+      OFFLINE = true;
+    }
+  }
+
   // 前置事实：所有接口按 openid 查 user_id，首次进入必须先建号
   try {
     await api('/v0/home/info', { data: { openid: OPENID } });
   } catch (e) {
     document.getElementById('app').innerHTML =
-      '<div class="card"><div class="empty">后端未启动或建号失败：' + esc(e.message) +
+      '<div class="card"><div class="empty">启动失败：' + esc(e.message) +
       '<br><br><button class="btn btn-primary" onclick="location.reload()">重试</button></div></div>';
     return;
   }
+  setModeHint();
   route();
 })();

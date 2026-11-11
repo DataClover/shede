@@ -63,6 +63,9 @@ body {
 
 .container { flex: 1; width: 100%; max-width: 720px; margin: 0 auto; padding: 24px 16px 48px; }
 .footer { text-align: center; color: var(--text-sub); font-size: 12px; padding: 16px; }
+.footer-hint { margin-top: 4px; font-size: 11px; color: var(--text-sub); }
+.footer-hint.is-demo { color: var(--orange, #d9822b); }
+.footer-hint.is-live { color: var(--green, #2e9e5b); }
 
 .loading { text-align: center; color: var(--text-sub); padding: 60px 0; }
 
