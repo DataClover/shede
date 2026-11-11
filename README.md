@@ -37,7 +37,8 @@
 │  ├─ index.html
 │  ├─ style.css
 │  ├─ app.js                页面与交互逻辑
-│  └─ offline.js            本地演示引擎（无后端时接管全部接口）
+│  ├─ offline.js            本地演示引擎（无后端时接管全部接口）
+│  └─ assets/               示例图片
 ├─ backend/                 FastAPI 后端（完整功能）
 │  ├─ launch.py             入口
 │  ├─ config.ini.example    配置模板

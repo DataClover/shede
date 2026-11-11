@@ -141,10 +141,7 @@
   }
 
   var BUILTIN_IMAGES = {
-    'sample_mug.svg': svgIcon(
-      '<path d="M36 42h44v38a10 10 0 0 1-10 10H46a10 10 0 0 1-10-10z" fill="none" stroke="#948a7c" stroke-width="3" stroke-linejoin="round"/>' +
-      '<path d="M80 52h7a9 9 0 0 1 0 18h-7" fill="none" stroke="#948a7c" stroke-width="3"/>'
-    ),
+    'demo_mug.jpg': 'assets/demo_mug.jpg',
     'sample_earphone.svg': svgIcon(
       '<path d="M32 68a28 28 0 0 1 56 0" fill="none" stroke="#948a7c" stroke-width="3" stroke-linecap="round"/>' +
       '<rect x="26" y="64" width="13" height="24" rx="6.5" fill="none" stroke="#948a7c" stroke-width="3"/>' +
@@ -163,7 +160,7 @@
       title: '多余的马克杯',
       category: '生活用品',
       description: '柜子里已经有四个杯子，这个是活动赠品。',
-      image: 'sample_mug.svg',
+      image: 'demo_mug.jpg',
       status: 'observing',
       answers: { usage_answer: 'long', rebuy_answer: 'unsure', replace_answer: 'has', emotion_answer: 'mid' }
     },
