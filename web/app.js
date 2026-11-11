@@ -100,7 +100,7 @@ async function api(path, { method = 'GET', data, formData } = {}) {
     // 4xx 业务错误：保留中文业务提示；英文堆栈/缺失则给兜底文案
     throw new Error(/[\u4e00-\u9fa5]/.test(detail) ? detail : '请求没有成功，请再试一次');
   }
-  if (body.status === 'error') throw new Error(body.message || '请求失败');
+  if (body.status === 'error') throw new Error(body.message || '这次没成功，再试一次吧');
   return body.data !== undefined ? body.data : body;
 }
 
@@ -224,7 +224,7 @@ async function viewHome() {
         itemThumb(it) +
         '<div class="item-info"><div class="item-title">' + esc(it.title) + '</div>' +
         '<div class="item-meta">' + esc(it.category || '未分类') +
-        (it.ai_score != null ? ' · AI ' + it.ai_score + ' 分' : '') + '</div></div>' +
+        (it.ai_score != null ? ' · 我给了 ' + it.ai_score + ' 分' : '') + '</div></div>' +
         '<span class="chip chip-pending">' + (it.ai_verdict ? '看分析' : '一起想') + '</span>' +
         '</div>';
     }).join('');

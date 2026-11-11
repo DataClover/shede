@@ -141,7 +141,7 @@
   };
 
   // 四条样本：待决策 / 观察中 / 观察到期 / 已决定，覆盖看板四种展示
-  var SEED_VERSION = 2;
+  var SEED_VERSION = 3;
 
   var SEED_SPECS = [
     {
@@ -163,7 +163,7 @@
     {
       title: '过期的护肤品',
       category: '美妆个护',
-      description: '开封超过一年，已经不建议继续使用。',
+      description: '开封超过一年，不太敢往脸上用了。',
       image: 'demo_bottle.jpg',
       status: 'observing',
       observeOffset: -25, // 25 天前就到期了，用来演示首页的到期提醒
@@ -410,7 +410,7 @@
       } else if (d === 'keep' || d === 'sell' || d === 'gift' || d === 'recycle' || d === 'discard') {
         it3.status = 'resolved';
       } else {
-        throw new Error('无效的选择');
+        throw new Error('这个选择我没看懂，再试一次');
       }
       it3.decision = d;
       save();
@@ -468,11 +468,11 @@
     // 生成处理建议
     if (p === '/v5/dispose/suggest') {
       var tpl = DISPOSE_TPL[data.channel];
-      if (!tpl) throw new Error('无效的处理渠道');
+      if (!tpl) throw new Error('这个去向暂时还不支持');
       return { suggest: tpl, channel: data.channel };
     }
 
-    throw new Error('演示模式未实现的接口：' + p);
+    throw new Error('演示版还没有这个功能');
   }
 
   function sleep(ms) {
