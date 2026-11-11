@@ -133,28 +133,16 @@
 
   // ---------- 初始演示数据 ----------
 
-  // 用简洁线条图代替照片，避免占位空框，也不依赖任何外部图片
-  function svgIcon(inner) {
-    var s = '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120">' +
-      '<rect width="120" height="120" fill="#f3f0ea"/>' + inner + '</svg>';
-    return 'data:image/svg+xml;charset=utf-8,' + encodeURIComponent(s);
-  }
-
+  // 示例物品配图（随包附带，不依赖网络）
   var BUILTIN_IMAGES = {
     'demo_mug.jpg': 'assets/demo_mug.jpg',
-    'sample_earphone.svg': svgIcon(
-      '<path d="M32 68a28 28 0 0 1 56 0" fill="none" stroke="#948a7c" stroke-width="3" stroke-linecap="round"/>' +
-      '<rect x="26" y="64" width="13" height="24" rx="6.5" fill="none" stroke="#948a7c" stroke-width="3"/>' +
-      '<rect x="81" y="64" width="13" height="24" rx="6.5" fill="none" stroke="#948a7c" stroke-width="3"/>'
-    ),
-    'sample_bottle.svg': svgIcon(
-      '<rect x="48" y="26" width="24" height="11" rx="2" fill="none" stroke="#948a7c" stroke-width="3"/>' +
-      '<rect x="42" y="37" width="36" height="52" rx="5" fill="none" stroke="#948a7c" stroke-width="3"/>' +
-      '<path d="M42 58h36" stroke="#948a7c" stroke-width="2" stroke-dasharray="4 4"/>'
-    )
+    'demo_earphone.jpg': 'assets/demo_earphone.jpg',
+    'demo_bottle.jpg': 'assets/demo_bottle.jpg'
   };
 
-  // 三条样本覆盖看板三种状态：观察中 / 待决策 / 已决定
+  // 四条样本：待决策 / 观察中 / 观察到期 / 已决定，覆盖看板四种展示
+  var SEED_VERSION = 2;
+
   var SEED_SPECS = [
     {
       title: '多余的马克杯',
@@ -168,7 +156,7 @@
       title: '旧蓝牙耳机',
       category: '电子产品',
       description: '用了三年的入耳式耳机，右耳偶尔断连。',
-      image: 'sample_earphone.svg',
+      image: 'demo_earphone.jpg',
       status: 'pending',
       answers: null
     },
@@ -176,15 +164,26 @@
       title: '过期的护肤品',
       category: '美妆个护',
       description: '开封超过一年，已经不建议继续使用。',
-      image: 'sample_bottle.svg',
+      image: 'demo_bottle.jpg',
+      status: 'observing',
+      observeOffset: -25, // 25 天前就到期了，用来演示首页的到期提醒
+      answers: { usage_answer: 'never', rebuy_answer: 'no', replace_answer: 'broken', emotion_answer: 'low' }
+    },
+    {
+      title: '穿旧的帆布鞋',
+      category: '服饰鞋包',
+      description: '鞋底磨损明显，已经换成新鞋。',
+      image: '',
       status: 'resolved',
       decision: 'discard',
-      answers: { usage_answer: 'never', rebuy_answer: 'no', replace_answer: 'broken', emotion_answer: 'low' }
+      answers: { usage_answer: 'never', rebuy_answer: 'no', replace_answer: 'has', emotion_answer: 'low' }
     }
   ];
 
   function seedDemo() {
-    if (DB.seeded || DB.items.length) { DB.seeded = true; return; }
+    // 版本不符说明示例数据已升级，重建一次，避免旧的本地缓存挡住新样例
+    if (DB.seedVersion === SEED_VERSION && DB.items.length) return;
+    DB = { items: [], seq: 0, seeded: true, seedVersion: SEED_VERSION };
     SEED_SPECS.forEach(function (spec) {
       DB.seq += 1;
       var item = {
@@ -199,7 +198,9 @@
         ai_reason: '',
         ai_dims: null,
         decision: spec.decision || null,
-        observe_until: spec.status === 'observing' ? fmtDate(addDays(today(), 30)) : null,
+        observe_until: spec.status === 'observing'
+          ? fmtDate(addDays(today(), spec.observeOffset != null ? spec.observeOffset : 30))
+          : null,
         observe_used_count: 0,
         created_at: fmtDate(today())
       };
